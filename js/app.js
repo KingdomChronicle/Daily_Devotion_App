@@ -1043,50 +1043,20 @@ function initApp() {
         });
     }
 
-// Export button functionality - FR-EXP-001 Dual Action Flow
+// Export button functionality
 const exportBtn = document.querySelector('.toolbar-btn:last-child');
 if (exportBtn) {
     exportBtn.addEventListener('click', async function() {
-        console.log('📋 Export button clicked - FR-EXP-001 Dual Action Flow');
+        console.log('Export button clicked - Copying reflection to clipboard');
         try {
-            // STEP 1: Generate Export Text
-            const text = formatReflection();
-            console.log('  ✅ Export text generated');
-
-            // STEP 2: Clipboard Export (PRIMARY ACTION) with fallback
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                // Modern Clipboard API
-                await navigator.clipboard.writeText(text);
-                console.log('  ✅ Reflection copied to clipboard successfully (Clipboard API)');
+            const success = await copyReflection();
+            if (success) {
+                console.log('✓ Reflection copied to clipboard successfully');
             } else {
-                // Fallback: Create temporary textarea and copy
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                textarea.style.left = '-9999px';
-                textarea.style.top = '-9999px';
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                console.log('  ✅ Reflection copied to clipboard successfully (Fallback)');
+                console.log('⚠ Export failed - check console for details');
             }
-
-            // STEP 3: Stability Delay
-            await new Promise(resolve => setTimeout(resolve, 100));
-            console.log('  ✅ Clipboard write confirmed');
-
-            // STEP 4: External Submission Redirect (SECONDARY ACTION)
-            window.open(
-                'https://m.me/j/AbZ4j5yKrZTVwAmn/?send_source=gc%3Acopy_invite_link_t',
-                '_blank'
-            );
-            console.log('  ✅ Messenger group chat opened');
-
-        } catch (err) {
-            console.error('❌ Export failed:', err);
-            alert('Export failed. Please try again.');
+        } catch (error) {
+            console.log(`⚠ Export error: ${error.message}`);
         }
     });
 }
@@ -1110,6 +1080,20 @@ if (exportBtn) {
     if (applyBtn) {
         applyBtn.addEventListener('click', handleApplyAction);
     }
+
+    // Submit button functionality - FR-SUB-001-M1
+const submitBtn = document.getElementById('submitBtn');
+if (submitBtn) {
+    const url = submitBtn.dataset.submitUrl;
+    submitBtn.addEventListener('click', function() {
+        if (url) {
+            window.open(url, '_blank');
+            console.log('📋 Submit: Messenger group chat opened');
+        } else {
+            console.warn('⚠ Submit: No URL configured');
+        }
+    });
+}
 
     // ============================================
     // PREVIEW PANEL CONTROLS (M4.1 & M4.2)
