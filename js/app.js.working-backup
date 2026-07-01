@@ -170,7 +170,7 @@ function initApp() {
             // Use the global template state for display
             const currentLevel = CURRENT_TEMPLATE || 'Level 1';
             dialogContext.textContent = `Current Template: ${currentLevel}`;
-            
+
             // Also log for debugging
             console.log(`📋 Dialog context updated to: ${currentLevel}`);
         }
@@ -181,16 +181,11 @@ function initApp() {
     // ============================================
 
     function getFieldValue(fieldName) {
-        // Try multiple methods to find the field
         const fieldContainers = document.querySelectorAll('.template-field');
-        
-        // Method 1: Exact label match
         for (const container of fieldContainers) {
             const label = container.querySelector('label');
             if (label) {
-                let labelName = label.textContent.replace(/[:\*]/g, '').trim();
-                // Normalize spaces
-                labelName = labelName.replace(/\s+/g, ' ');
+                const labelName = label.textContent.replace(':', '').trim();
                 if (labelName === fieldName) {
                     const input = container.querySelector('.template-input');
                     const textarea = container.querySelector('.template-textarea');
@@ -199,62 +194,16 @@ function initApp() {
                 }
             }
         }
-        
-        // Method 2: Try by data-field attribute
-        const fieldKey = fieldName.toLowerCase().replace(/ /g, '_');
-        const fieldByData = document.querySelector(`[data-field="${fieldKey}"]`);
-        if (fieldByData) {
-            return fieldByData.value || '';
-        }
-        
-        // Method 3: Try by id
-        const fieldById = document.getElementById(`field-${fieldKey}`);
-        if (fieldById) {
-            return fieldById.value || '';
-        }
-        
-        // Method 4: Fuzzy match (case insensitive, trim extra spaces)
-        for (const container of fieldContainers) {
-            const label = container.querySelector('label');
-            if (label) {
-                let labelName = label.textContent.replace(/[:\*]/g, '').trim();
-                labelName = labelName.replace(/\s+/g, ' ');
-                if (labelName.toLowerCase() === fieldName.toLowerCase()) {
-                    const input = container.querySelector('.template-input');
-                    const textarea = container.querySelector('.template-textarea');
-                    if (input) return input.value || '';
-                    if (textarea) return textarea.value || '';
-                }
-            }
-        }
-        
         return '';
     }
 
     function setFieldValue(fieldName, value) {
-        // Method 1: Try by data-field attribute
-        const fieldKey = fieldName.toLowerCase().replace(/ /g, '_');
-        const fieldByData = document.querySelector(`[data-field="${fieldKey}"]`);
-        if (fieldByData) {
-            fieldByData.value = value;
-            return true;
-        }
-        
-        // Method 2: Try by id
-        const fieldById = document.getElementById(`field-${fieldKey}`);
-        if (fieldById) {
-            fieldById.value = value;
-            return true;
-        }
-        
-        // Method 3: Try by label match
         const fieldContainers = document.querySelectorAll('.template-field');
         for (const container of fieldContainers) {
             const label = container.querySelector('label');
             if (label) {
-                let labelName = label.textContent.replace(/[:\*]/g, '').trim();
-                labelName = labelName.replace(/\s+/g, ' ');
-                if (labelName === fieldName || labelName.toLowerCase() === fieldName.toLowerCase()) {
+                const labelName = label.textContent.replace(':', '').trim();
+                if (labelName === fieldName) {
                     const input = container.querySelector('.template-input');
                     const textarea = container.querySelector('.template-textarea');
                     if (input) {
@@ -268,7 +217,6 @@ function initApp() {
                 }
             }
         }
-        
         return false;
     }
 
@@ -937,109 +885,26 @@ function initApp() {
     // EVENT LISTENERS
     // ============================================
 
-    // New button functionality - SFRE (Selective Field Rehydration) - FINAL CORRECTED
+    // New button functionality
     const newBtn = document.querySelector('.toolbar-btn:first-child');
     if (newBtn) {
         newBtn.addEventListener('click', function() {
-            console.log('🔄 New button clicked - SFRE Selective Rehydration (FINAL CORRECTED)');
+            console.log('New button clicked - Creating fresh Level 1 reflection');
 
-            // STEP 1: No field preservation - Full Reset per Version 0.1 specification
-            // All fields will be empty after reconstruction
-            const persistedFields = [];
-            const preservedValues = {};
-
-            // No fields to preserve - all fields reset to empty
-            console.log('  ✓ Full reset: No fields preserved');
-
-            // STEP 2: Get current template level
+            // Get current template level before reset
             const currentLevel = detectTemplateLevel();
-            console.log(`  Current template: ${currentLevel}`);
 
-            // STEP 3: Get target schema and required fields
-            const targetSchema = getSchemaFields(currentLevel);
-            const requiredFields = getRequiredFields(currentLevel);
-            
-            // STEP 4: Clear the editor container and rebuild WITHOUT values
-            console.log('  Rebuilding editor (empty fields)...');
-            const editorContainer = document.querySelector('.editor-container');
-            if (!editorContainer) {
-                console.log('⚠ Editor container not found');
-                return;
+            // Execute template switch to Level 1
+            const result = executeTemplateSwitch('Level 1');
+
+            // Clear all field values
+            const fields = getTemplateFieldValues();
+            for (const [fieldName, value] of Object.entries(fields)) {
+                setFieldValue(fieldName, '');
             }
-            
-            const parent = editorContainer.parentNode;
-            const newEditorContainer = document.createElement('div');
-            newEditorContainer.className = 'editor-container';
-            newEditorContainer.id = 'editor-container';
-            
-            // Rebuild fields in canonical order WITHOUT any values
-            for (const fieldName of targetSchema) {
-                const isMultiline = (fieldName === 'Reflection' || fieldName === 'Prayer Points' || fieldName === 'Application');
-                
-                const fieldDiv = document.createElement('div');
-                fieldDiv.className = 'template-field';
-                
-                const label = document.createElement('label');
-                label.textContent = `${fieldName}:`;
-                
-                if (requiredFields.includes(fieldName)) {
-                    const indicator = document.createElement('span');
-                    indicator.className = 'required-indicator';
-                    indicator.textContent = ' *';
-                    label.appendChild(indicator);
-                }
-                
-                fieldDiv.appendChild(label);
-                
-                const fieldKey = fieldName.toLowerCase().replace(/ /g, '_');
-                
-                if (isMultiline) {
-                    const textarea = document.createElement('textarea');
-                    textarea.className = 'template-textarea';
-                    textarea.setAttribute('data-field', fieldKey);
-                    textarea.setAttribute('id', `field-${fieldKey}`);
-                    
-                    if (requiredFields.includes(fieldName)) {
-                        textarea.setAttribute('required', 'required');
-                    }
-                    
-                    fieldDiv.appendChild(textarea);
-                } else {
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.className = 'template-input';
-                    input.setAttribute('data-field', fieldKey);
-                    input.setAttribute('id', `field-${fieldKey}`);
-                    
-                    if (requiredFields.includes(fieldName)) {
-                        input.setAttribute('required', 'required');
-                    }
-                    
-                    fieldDiv.appendChild(input);
-                }
-                
-                // Add error container
-                const errorDiv = document.createElement('div');
-                const errorId = `error-${fieldKey}`;
-                errorDiv.className = 'field-error';
-                errorDiv.id = errorId;
-                fieldDiv.appendChild(errorDiv);
-                
-                newEditorContainer.appendChild(fieldDiv);
-            }
-            
-            parent.replaceChild(newEditorContainer, editorContainer);
-            console.log(`  ✓ Rebuilt editor with ${targetSchema.length} fields (all empty)`);
 
-            // STEP 5: No restoration needed - all fields are empty
-            // (reconstruction already created empty fields)
-            const restoredCount = 0;
-            console.log('  ✓ No field restoration - all fields empty');
-
-            // STEP 6: All fields are empty - Full Reset complete
-            console.log(`✅ Full Reset complete - ${targetSchema.length} fields empty`);
-            console.log(`  Template: ${currentLevel} (unchanged)`);
-            console.log(`  All fields reset to empty`);
+            console.log('✓ New reflection created - Level 1 template applied and fields cleared');
+            console.log(`  Fields cleared: ${Object.keys(fields).length}`);
         });
     }
 
@@ -1158,27 +1023,15 @@ function initApp() {
             return '';
         }
 
-        // FR-003-M1: Export Optional Field Omission
-        // Designated Export-Optional Fields: Crowns, Prayer Points, Application
-        const EXPORT_OPTIONAL_FIELDS = ['Crowns', 'Prayer Points', 'Application'];
-
         const lines = [];
 
-        // Add header - standardized for all template levels
-        lines.push(`=== Reflection ===`);
+        // Add header
+        lines.push(`=== ${currentLevel} Reflection ===`);
         lines.push('');
 
         // Render fields in official schema order
         for (const fieldName of schema) {
             const value = fields[fieldName] || '';
-            const isOptional = EXPORT_OPTIONAL_FIELDS.includes(fieldName);
-
-            // AT-1: Skip empty optional fields
-            if (isOptional && value.trim() === '') {
-                continue;
-            }
-
-            // AT-2/AT-3: Required fields and populated optional fields render normally
             const displayValue = value || '[Empty]';
 
             // Preserve multiline formatting
@@ -1191,7 +1044,6 @@ function initApp() {
             }
         }
 
-        // AT-6: Footer preserved unchanged
         lines.push('');
         lines.push('=== End of Reflection ===');
         const output = lines.join('\n');
@@ -1824,10 +1676,10 @@ function initApp() {
             const message = `Please complete all required fields before exporting your reflection.`;
             showValidationSummary(message);
             console.log(`❌ Validation failed for ${action}: ${result.invalidCount} field(s) missing`);
-            
+
             // V2.4: Focus first invalid field
             focusFirstInvalidField();
-            
+
             return false;
         }
     }
@@ -1840,7 +1692,7 @@ function initApp() {
         // Get current template level
         const currentLevel = detectTemplateLevel();
         const requiredFields = getRequiredFields(currentLevel);
-        
+
         // Find first invalid required field
         const fieldContainers = document.querySelectorAll('.template-field');
         for (const container of fieldContainers) {
@@ -1851,7 +1703,7 @@ function initApp() {
                     const input = container.querySelector('.template-input');
                     const textarea = container.querySelector('.template-textarea');
                     const field = input || textarea;
-                    
+
                     if (field && !field.value.trim()) {
                         // Focus the field
                         field.focus();

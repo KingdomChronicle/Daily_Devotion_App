@@ -11,47 +11,297 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 16px;
-    line-height: 1.6;
-    color: #000;
+    line-height: 1.7;
+    color: #1a1a1a;
     background-color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* PAGE STRUCTURE */
 #app {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 32px 24px !important;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    gap: 24px;
+    background: #fafafa;
 }
 
 /* SECTION LAYOUTS */
 #toolbar {
-    margin-bottom: 20px;
-    padding: 10px;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* TOOLBAR LAYOUT */
+.toolbar-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* ============================================
+   TOOLBAR BUTTONS - UPDATED M6.3
+   ============================================ */
+.toolbar-btn {
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    color: #333;
+    transition: all 0.2s ease;
+    user-select: none;
+    outline: none;
+}
+
+.toolbar-btn:hover {
+    background-color: #e4e4e4;
+    border-color: #b8b8b8;
+}
+
+.toolbar-btn:active {
+    background-color: #d0d0d0;
+    border-color: #a8a8a8;
+    transform: scale(0.97);
+}
+
+.toolbar-btn:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.3);
+    border-color: #4a90d9;
+}
+
+.toolbar-btn:focus:not(:focus-visible) {
+    box-shadow: none;
+}
+
+.toolbar-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.4);
+    border-color: #4a90d9;
+}
+
+/* RESPONSIVE TOOLBAR */
+@media (max-width: 480px) {
+    .toolbar-container {
+        gap: 6px;
+    }
+
+    .toolbar-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        flex: 1 1 auto;
+        min-width: 60px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 380px) {
+    .toolbar-container {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .toolbar-btn {
+        width: 100%;
+        padding: 8px;
+    }
 }
 
 #editor {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
+    padding: 0;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
     min-height: 200px;
+    max-height: 520px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.editor-container {
+    flex: 1;
+    padding: 20px 24px;
+    min-height: 180px;
+    height: 100%;
+}
+
+.template-field {
+    padding: 12px 0 !important;
+    font-size: 16px;
+    color: #1a1a1a;
+    line-height: 1.7;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px !important;
+    border-bottom: 1px solid #f0f0f5;
+}
+
+.template-field:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
+}
+
+.template-field label {
+    min-width: 140px !important;
+    font-weight: 600;
+    padding-top: 8px;
+    flex-shrink: 0;
+    color: #1a1a1a;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
+}
+
+.template-input {
+    flex: 1;
+    padding: 8px 12px !important;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: #fcfcfc;
+    color: #1a1a1a;
+    min-width: 0;
+    width: 100%;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    line-height: 1.6;
+}
+
+.template-input:hover {
+    background-color: #f5f5f5;
+}
+
+.template-input:focus {
+    outline: none;
+    border-color: #4a90d9;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+}
+
+.template-textarea {
+    flex: 1;
+    padding: 8px 12px !important;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: #fcfcfc;
+    color: #1a1a1a;
+    min-height: 140px;
+    resize: vertical;
+    min-width: 0;
+    width: 100%;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    line-height: 1.8;
+}
+
+.template-textarea:hover {
+    background-color: #f5f5f5;
+}
+
+.template-textarea:focus {
+    outline: none;
+    border-color: #4a90d9;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+}
+
+/* RESPONSIVE INPUT FIELDS - UPDATED WITH BETTER TYPOGRAPHY */
+@media (max-width: 768px) {
+    .template-field {
+        padding: 12px 0 !important;
+        gap: 12px !important;
+    }
+
+    .template-field label {
+        min-width: 120px !important;
+        font-size: 14px !important;
+        line-height: 1.6;
+    }
+
+    .template-input,
+    .template-textarea {
+        font-size: 14px !important;
+        padding: 8px 10px !important;
+        line-height: 1.6;
+    }
+
+    .template-textarea {
+        min-height: 120px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .template-field {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px !important;
+        padding: 10px 0 !important;
+    }
+
+    .template-field label {
+        min-width: unset !important;
+        padding-top: 0;
+        font-size: 13px !important;
+        line-height: 1.5;
+    }
+
+    .template-input,
+    .template-textarea {
+        width: 100%;
+        font-size: 13px !important;
+        padding: 8px 10px !important;
+        line-height: 1.5;
+    }
+
+    .template-textarea {
+        min-height: 100px !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .template-field {
+        padding: 8px 0 !important;
+    }
+
+    .template-field label {
+        font-size: 12px !important;
+    }
+
+    .template-input,
+    .template-textarea {
+        font-size: 12px !important;
+        padding: 6px 8px !important;
+    }
+
+    .template-textarea {
+        min-height: 80px !important;
+    }
 }
 
 #preview {
     padding: 10px;
     border: 1px solid #e0e0e0;
-    border-radius: 4px;
+    border-radius: 6px;
     min-height: 150px;
 }
 
-/* RESPONSIVE RULES */
+/* RESPONSIVE RULES - UPDATED */
 @media (max-width: 768px) {
     #app {
-        padding: 10px;
+        padding: 24px 16px !important;
     }
 
     #editor {
@@ -65,16 +315,689 @@ body {
 
 @media (max-width: 480px) {
     #app {
-        padding: 5px;
+        padding: 16px 12px !important;
     }
 
     #editor {
         min-height: 120px;
-        padding: 8px;
+        padding: 0;
     }
 
     #preview {
         min-height: 80px;
         padding: 8px;
+    }
+}
+
+/* ============================================
+   TEMPLATE SELECTOR DIALOG STYLES
+   ============================================ */
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.dialog-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 500px;
+    max-width: 90%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.dialog-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.dialog-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+}
+
+.dialog-body {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+#dialog-context {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.template-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.template-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.template-option:hover {
+    border-color: #4a90d9;
+    background: #f5f9ff;
+}
+
+.template-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #4a90d9;
+}
+
+.template-option span {
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.dialog-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ============================================
+   DIALOG BUTTONS - UPDATED M6.3
+   ============================================ */
+.dialog-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    font-family: inherit;
+}
+
+.dialog-btn-primary {
+    background: #4a90d9;
+    color: white;
+}
+
+.dialog-btn-primary:hover {
+    background: #357abd;
+}
+
+.dialog-btn-primary:active {
+    background: #2a6ba8;
+    transform: scale(0.97);
+}
+
+.dialog-btn-primary:disabled {
+    background: #a0c4e8;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.dialog-btn-primary:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.3);
+}
+
+.dialog-btn-primary:focus:not(:focus-visible) {
+    box-shadow: none;
+}
+
+.dialog-btn-primary:focus-visible {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.4);
+}
+
+.dialog-btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+    border: 1px solid #d0d0d0;
+}
+
+.dialog-btn-secondary:hover {
+    background: #e4e4e4;
+    border-color: #b8b8b8;
+}
+
+.dialog-btn-secondary:active {
+    background: #d0d0d0;
+    border-color: #a8a8a8;
+    transform: scale(0.97);
+}
+
+.dialog-btn-secondary:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.3);
+    border-color: #4a90d9;
+}
+
+.dialog-btn-secondary:focus:not(:focus-visible) {
+    box-shadow: none;
+}
+
+.dialog-btn-secondary:focus-visible {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.4);
+    border-color: #4a90d9;
+}
+
+/* ============================================
+   PREVIEW PANEL STYLES (M4.1)
+   ============================================ */
+
+#preview-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.preview-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    width: 600px;
+    max-width: 90%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
+}
+
+.preview-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+}
+
+/* ============================================
+   PREVIEW CLOSE BUTTON - UPDATED M6.3
+   ============================================ */
+.preview-close-btn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    color: #999;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.preview-close-btn:hover {
+    color: #333;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.preview-close-btn:active {
+    transform: scale(0.9);
+}
+
+.preview-close-btn:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.3);
+}
+
+.preview-close-btn:focus:not(:focus-visible) {
+    box-shadow: none;
+}
+
+.preview-close-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.4);
+}
+
+.preview-content {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 200px;
+}
+
+.preview-placeholder {
+    color: #999;
+    font-size: 16px;
+    text-align: center;
+    margin: 40px 0;
+    font-style: italic;
+}
+
+/* Responsive Preview - UPDATED */
+@media (max-width: 768px) {
+    .preview-container {
+        width: 95%;
+        max-height: 85vh;
+    }
+
+    .preview-header {
+        padding: 12px 16px;
+    }
+
+    .preview-title {
+        font-size: 18px !important;
+        line-height: 1.4;
+    }
+
+    .preview-content {
+        padding: 16px;
+        min-height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .preview-container {
+        width: 98%;
+        max-height: 90vh;
+        border-radius: 8px;
+    }
+
+    .preview-header {
+        padding: 10px 14px;
+    }
+
+    .preview-title {
+        font-size: 16px !important;
+        line-height: 1.4;
+    }
+
+    .preview-close-btn {
+        font-size: 24px;
+    }
+
+    .preview-content {
+        padding: 12px;
+        min-height: 120px;
+    }
+
+    .preview-placeholder {
+        font-size: 14px;
+        margin: 30px 0;
+    }
+}
+
+/* ============================================
+   PREVIEW RENDERED CONTENT STYLES (M4.2)
+   ============================================ */
+
+.preview-reflection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.preview-field {
+    display: flex;
+    align-items: baseline;
+    padding: 4px 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 14px;
+}
+
+.preview-field:last-child {
+    border-bottom: none;
+}
+
+.preview-field-label {
+    font-weight: 600;
+    color: #333;
+    min-width: 130px;
+    flex-shrink: 0;
+}
+
+.preview-field-value {
+    color: #555;
+    word-wrap: break-word;
+    flex: 1;
+}
+
+.preview-field-value em {
+    color: #bbb;
+    font-style: italic;
+}
+
+.preview-multiline {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 0;
+}
+
+.preview-multiline .preview-field-label {
+    min-width: unset;
+    margin-bottom: 4px;
+}
+
+.preview-multiline .preview-field-value {
+    white-space: pre-wrap;
+    padding: 6px 10px;
+    background: #f9f9f9;
+    border-radius: 6px;
+    border-left: 3px solid #4a90d9;
+    line-height: 1.6;
+}
+
+/* Responsive Preview Content */
+@media (max-width: 768px) {
+    .preview-field {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        padding: 6px 0;
+    }
+
+    .preview-field-label {
+        min-width: unset;
+        font-size: 13px;
+    }
+
+    .preview-field-value {
+        font-size: 13px;
+    }
+
+    .preview-multiline .preview-field-value {
+        font-size: 13px;
+        padding: 4px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .preview-field {
+        padding: 4px 0;
+    }
+
+    .preview-field-label {
+        font-size: 12px;
+    }
+
+    .preview-field-value {
+        font-size: 12px;
+    }
+
+    .preview-multiline .preview-field-value {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+}
+
+/* ============================================
+   READ-ONLY PREVIEW INDICATORS (M4.3)
+   ============================================ */
+
+.preview-content {
+    user-select: text;
+    cursor: default;
+}
+
+.preview-content .preview-field-value {
+    user-select: text;
+    cursor: default;
+}
+
+.preview-content .preview-field-value em {
+    user-select: text;
+    cursor: default;
+}
+
+.preview-content .preview-field-label {
+    user-select: text;
+    cursor: default;
+}
+
+/* Prevent any interaction that could modify content */
+.preview-content * {
+    pointer-events: none;
+}
+
+/* But allow text selection for copying */
+.preview-content {
+    pointer-events: auto;
+}
+
+.preview-content .preview-field-value,
+.preview-content .preview-field-label,
+.preview-content em {
+    pointer-events: auto;
+    cursor: default;
+}
+
+/* Read-only indicator */
+.preview-container::before {
+    content: " Read-Only Mode";
+    display: block;
+    background: #f0f7ff;
+    color: #4a90d9;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 16px;
+    text-align: center;
+    border-bottom: 1px solid #d0e4ff;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 480px) {
+    .preview-container::before {
+        font-size: 10px;
+        padding: 4px 12px;
+    }
+}
+
+/* ============================================
+   EXPORT CONFIRMATION (M5.3)
+   ============================================ */
+
+#export-confirmation {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #4a90d9;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    font-weight: 500;
+    min-width: 250px;
+    animation: slideInRight 0.3s ease-out;
+    transition: opacity 0.3s ease;
+}
+
+#export-confirmation.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#export-confirmation .confirmation-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#export-confirmation .confirmation-icon {
+    font-size: 20px;
+}
+
+#export-confirmation .confirmation-text {
+    flex: 1;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Responsive Confirmation */
+@media (max-width: 480px) {
+    #export-confirmation {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        padding: 10px 16px;
+        font-size: 14px;
+        min-width: unset;
+        border-radius: 6px;
+    }
+
+    #export-confirmation .confirmation-icon {
+        font-size: 16px;
+    }
+}
+
+/* ============================================
+   M6.5 — VALIDATION STYLES
+   ============================================ */
+
+/* Validation Summary */
+.validation-summary {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+    animation: validationSlideDown 0.3s ease;
+}
+
+.validation-summary.hidden {
+    display: none;
+}
+
+.validation-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.validation-message {
+    flex: 1;
+    font-size: 14px;
+    color: #856404;
+    font-weight: 500;
+}
+
+.validation-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #856404;
+    padding: 0 4px;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.validation-close-btn:hover {
+    opacity: 1;
+}
+
+.validation-close-btn:focus-visible {
+    outline: 2px solid #4a90d9;
+    outline-offset: 2px;
+}
+
+/* Field Error Messages */
+.field-error {
+    color: #dc3545;
+    font-size: 13px;
+    margin-top: 4px;
+    min-height: 20px;
+    transition: all 0.2s ease;
+}
+
+.field-error:empty {
+    display: none;
+}
+
+.field-error.show {
+    display: block;
+    animation: validationSlideDown 0.2s ease;
+}
+
+/* Required Indicator */
+.required-indicator {
+    color: #dc3545;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+/* Field Error State */
+.template-field.has-error .template-input,
+.template-field.has-error .template-textarea {
+    border-color: #dc3545;
+    background-color: #fff8f8;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* Validation Animations */
+@keyframes validationSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

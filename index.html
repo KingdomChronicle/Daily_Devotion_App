@@ -9,15 +9,142 @@
 <body>
     <div id="app">
         <header id="toolbar">
-            <div class="shell-label">Toolbar Area</div>
+            <div class="toolbar-container">
+                <button class="toolbar-btn">New</button>
+                <button class="toolbar-btn" id="level-selector-btn">Level</button>
+                <button class="toolbar-btn" id="preview-btn">Preview</button>
+                <button class="toolbar-btn">Export</button>
+            </div>
         </header>
+
+        <!-- Validation Summary -->
+        <div id="validation-summary" class="validation-summary" style="display: none;">
+            <div class="validation-icon">⚠️</div>
+            <div class="validation-message" id="validation-message-text">Please fill in all required fields before proceeding.</div>
+            <button class="validation-close-btn" id="validation-close-btn" aria-label="Close validation message">&times;</button>
+        </div>
+
         <main id="editor">
-            <div class="shell-label">Editor Area</div>
+            <div class="editor-container">
+                <!-- Level 1 - Required Fields (9): Username, Age, Class, Location, Devotion Number, Date, Time Start, Reflection, Time End -->
+                <!-- Optional Fields (3): Crowns, Prayer Points, Application -->
+
+                <div class="template-field">
+                    <label>Username: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="username" required>
+                    <div class="field-error" id="error-username"></div>
+                </div>
+                <div class="template-field">
+                    <label>Age: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="age" required>
+                    <div class="field-error" id="error-age"></div>
+                </div>
+                <div class="template-field">
+                    <label>Class: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="class" required>
+                    <div class="field-error" id="error-class"></div>
+                </div>
+                <div class="template-field">
+                    <label>Crowns:</label>
+                    <input type="text" class="template-input" data-field="crowns">
+                    <div class="field-error" id="error-crowns"></div>
+                </div>
+                <div class="template-field">
+                    <label>Location: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="location" required>
+                    <div class="field-error" id="error-location"></div>
+                </div>
+                <div class="template-field">
+                    <label>Devotion Number: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="devotion_number" required>
+                    <div class="field-error" id="error-devotion_number"></div>
+                </div>
+                <div class="template-field">
+                    <label>Date: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="date" required>
+                    <div class="field-error" id="error-date"></div>
+                </div>
+                <div class="template-field">
+                    <label>Time Start: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="time_start" required>
+                    <div class="field-error" id="error-time_start"></div>
+                </div>
+                <div class="template-field">
+                    <label>Reflection: <span class="required-indicator">*</span></label>
+                    <textarea class="template-textarea" data-field="reflection" required></textarea>
+                    <div class="field-error" id="error-reflection"></div>
+                </div>
+                <div class="template-field">
+                    <label>Prayer Points:</label>
+                    <textarea class="template-textarea" data-field="prayer_points"></textarea>
+                    <div class="field-error" id="error-prayer_points"></div>
+                </div>
+                <div class="template-field">
+                    <label>Application:</label>
+                    <textarea class="template-textarea" data-field="application"></textarea>
+                    <div class="field-error" id="error-application"></div>
+                </div>
+                <div class="template-field">
+                    <label>Time End: <span class="required-indicator">*</span></label>
+                    <input type="text" class="template-input" data-field="time_end" required>
+                    <div class="field-error" id="error-time_end"></div>
+                </div>
+            </div>
         </main>
-        <section id="preview">
-            <div class="shell-label">Preview Area</div>
+
+        <!-- Preview Panel -->
+        <section id="preview-panel" style="display: none;">
+            <div class="preview-container">
+                <div class="preview-header">
+                    <h2 class="preview-title">Preview</h2>
+                    <button class="preview-close-btn" id="preview-close-btn">&times;</button>
+                </div>
+                <div class="preview-content" id="preview-content">
+                    <!-- Placeholder for future rendered reflection content -->
+                    <p class="preview-placeholder">Preview will appear here</p>
+                </div>
+            </div>
         </section>
     </div>
+
+    <!-- Template Selector Dialog -->
+    <div id="template-selector-dialog" class="dialog-overlay" style="display: none;">
+        <div class="dialog-container">
+            <div class="dialog-header">
+                <h2 id="dialog-title">Select Template Level</h2>
+            </div>
+            <div class="dialog-body">
+                <p id="dialog-context">Current Template: Level 1</p>
+                <div class="template-options">
+                    <label class="template-option">
+                        <input type="radio" name="template-level" value="level1">
+                        <span>Level 1</span>
+                    </label>
+                    <label class="template-option">
+                        <input type="radio" name="template-level" value="level2">
+                        <span>Level 2</span>
+                    </label>
+                    <label class="template-option">
+                        <input type="radio" name="template-level" value="level3">
+                        <span>Level 3</span>
+                    </label>
+                </div>
+            </div>
+            <div class="dialog-footer">
+                <button id="apply-template-btn" class="dialog-btn dialog-btn-primary">Apply</button>
+                <button id="cancel-dialog-btn" class="dialog-btn dialog-btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Confirmation Message -->
+    <div id="export-confirmation" style="display: none;">
+        <div class="confirmation-content">
+            <span class="confirmation-icon">✅</span>
+            <span class="confirmation-text">Reflection copied to clipboard.</span>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
 </body>
 </html>
