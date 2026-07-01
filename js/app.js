@@ -1192,14 +1192,31 @@ if (submitBtn) {
             // AT-2/AT-3: Required fields and populated optional fields render normally
             const displayValue = value || '[Empty]';
 
-            // Preserve multiline formatting
-            if (displayValue.includes('\n')) {
-                lines.push(`${fieldName}:`);
-                const indentedLines = displayValue.split('\n').map(line => `  ${line}`);
-                lines.push(...indentedLines);
+        // FR-EXP-002-M1: Reflection Body Formatting Refinement
+        // Render Reflection as document body with its own section
+        if (fieldName === 'Reflection') {
+            lines.push('');  // BLANK LINE BEFORE Reflection
+            lines.push('Reflection:');
+            if (value && value.trim()) {
+                const reflectionLines = value.split('\n');
+                for (const line of reflectionLines) {
+                    lines.push(`  ${line}`);
+                }
             } else {
-                lines.push(`${fieldName}: ${displayValue}`);
+                lines.push('  (empty)');
             }
+            // NO blank line after Reflection body (blank line will be added by next field)
+        } else if (displayValue.includes('\n')) {
+            // Other multiline fields (Prayer Points, Application)
+            lines.push('');  // BLANK LINE BEFORE field
+            lines.push(`${fieldName}:`);
+            const indentedLines = displayValue.split('\n').map(line => `  ${line}`);
+            lines.push(...indentedLines);
+            // NO blank line after field body (blank line will be added by next field)
+        } else {
+            // Standard single-line fields
+            lines.push(`${fieldName}: ${displayValue}`);
+        }
         }
 
         // AT-6: Footer preserved unchanged
