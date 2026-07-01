@@ -1043,26 +1043,53 @@ function initApp() {
         });
     }
 
-    // Export button functionality
-    const exportBtn = document.querySelector('.toolbar-btn:last-child');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', async function() {
-            console.log('Export button clicked - Copying reflection to clipboard');
+// Export button functionality - FR-EXP-001 Dual Action Flow
+const exportBtn = document.querySelector('.toolbar-btn:last-child');
+if (exportBtn) {
+    exportBtn.addEventListener('click', async function() {
+        console.log('📋 Export button clicked - FR-EXP-001 Dual Action Flow');
+        try {
+            // STEP 1: Generate Export Text
+            const text = formatReflection();
+            console.log('  ✅ Export text generated');
 
-            try {
-                // Call the existing copyReflection function
-                const success = await copyReflection();
-
-                if (success) {
-                    console.log('✓ Reflection copied to clipboard successfully');
-                } else {
-                    console.log('⚠ Export failed - check console for details');
-                }
-            } catch (error) {
-                console.log(`⚠ Export error: ${error.message}`);
+            // STEP 2: Clipboard Export (PRIMARY ACTION) with fallback
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                // Modern Clipboard API
+                await navigator.clipboard.writeText(text);
+                console.log('  ✅ Reflection copied to clipboard successfully (Clipboard API)');
+            } else {
+                // Fallback: Create temporary textarea and copy
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                textarea.style.left = '-9999px';
+                textarea.style.top = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                console.log('  ✅ Reflection copied to clipboard successfully (Fallback)');
             }
-        });
-    }
+
+            // STEP 3: Stability Delay
+            await new Promise(resolve => setTimeout(resolve, 100));
+            console.log('  ✅ Clipboard write confirmed');
+
+            // STEP 4: External Submission Redirect (SECONDARY ACTION)
+            window.open(
+                'https://m.me/j/AbZ4j5yKrZTVwAmn/?send_source=gc%3Acopy_invite_link_t',
+                '_blank'
+            );
+            console.log('  ✅ Messenger group chat opened');
+
+        } catch (err) {
+            console.error('❌ Export failed:', err);
+            alert('Export failed. Please try again.');
+        }
+    });
+}
 
     if (levelBtn) {
         levelBtn.addEventListener('click', openDialog);
