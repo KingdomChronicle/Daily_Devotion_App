@@ -12,6 +12,61 @@ function initApp() {
     // Initialize the global template state
     CURRENT_TEMPLATE = 'Level 1';
 
+    // Initialize auto-expand on existing textareas
+    initializeAutoExpand();
+}
+
+/**
+ * Auto-expand textareas to fit content
+ * Implements Phase 2.1 Auto-Expanding Text Areas
+ * Presentation-layer only - preserves stateless architecture
+ */
+function autoExpand(element) {
+    if (!element || element.tagName !== 'TEXTAREA') return;
+
+    // Reset height to auto to measure scrollHeight correctly
+    element.style.height = 'auto';
+    // Set height to scrollHeight to expand
+    var newHeight = element.scrollHeight;
+    element.style.height = newHeight + 'px';
+}
+
+/**
+ * Initialize auto-expand on all textareas
+ * Also attaches event listeners for future typing
+ */
+function initializeAutoExpand() {
+    var textareas = document.querySelectorAll('.template-textarea');
+    textareas.forEach(function(textarea) {
+        // Skip temporary/clipboard textareas
+        if (textarea.style.position === 'fixed' && textarea.style.opacity === '0') {
+            return;
+        }
+        // Initial auto-expand
+        autoExpand(textarea);
+        // Attach input event
+        textarea.addEventListener('input', function() {
+            autoExpand(this);
+        });
+    });
+}
+
+/**
+ * Apply auto-expand to a newly created textarea
+ * Used for dynamic field creation
+ */
+function applyAutoExpandToTextarea(textarea) {
+    if (!textarea || textarea.tagName !== 'TEXTAREA') return;
+    // Skip temporary/clipboard textareas
+    if (textarea.style.position === 'fixed' && textarea.style.opacity === '0') {
+        return;
+    }
+    autoExpand(textarea);
+    textarea.addEventListener('input', function() {
+        autoExpand(this);
+    });
+}
+
     console.log('Daily Bible Reflection Notepad initialized');
 
     // DOM Elements
@@ -403,6 +458,8 @@ function initApp() {
             const textarea = document.createElement('textarea');
             textarea.className = 'template-textarea';
             newField.appendChild(textarea);
+            // Apply auto-expand to new textarea
+            applyAutoExpandToTextarea(textarea);
         } else {
             const input = document.createElement('input');
             input.type = 'text';
@@ -626,6 +683,9 @@ function initApp() {
                 if (requiredFields.includes(fieldName)) {
                     textarea.setAttribute('required', 'required');
                 }
+
+                // Apply auto-expand to new textarea
+                applyAutoExpandToTextarea(textarea);
 
                 inputElement = textarea;
             } else {
@@ -1004,6 +1064,8 @@ function initApp() {
                     }
                     
                     fieldDiv.appendChild(textarea);
+                    // Apply auto-expand to new textarea
+                    applyAutoExpandToTextarea(textarea);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'text';
@@ -1151,7 +1213,24 @@ if (submitBtn) {
 
         html += '</div>';
         previewContent.innerHTML = html;
-        console.log('✓ Preview rendered for ' + currentLevel);
+
+        // ============================================
+        // M6.2 — PREVIEW INHERITS EDITOR FONT SIZE
+        // ============================================
+        // Apply the current Editor font size to all preview content
+        const currentSize = currentFontSize || FONT_SIZE_CONFIG.defaultSize;
+        const previewFields = previewContent.querySelectorAll('.preview-field-value');
+        previewFields.forEach(field => {
+            field.style.fontSize = currentSize + 'px';
+            // Adjust line-height for readability
+            field.style.lineHeight = (currentSize * 1.8) + 'px';
+        });
+
+        // Also apply to the container for any text outside field-value elements
+        previewContent.style.fontSize = currentSize + 'px';
+        previewContent.style.lineHeight = (currentSize * 1.8) + 'px';
+
+        console.log(`✓ Preview rendered for ${currentLevel} with font size: ${currentSize}px`);
     }
 
     // ============================================
@@ -1629,6 +1708,13 @@ if (submitBtn) {
         if (previewPanel) {
             renderPreview();
             previewPanel.style.display = 'flex';
+            // Set focus to the close button when panel opens
+            const closeBtn = document.getElementById('preview-close-btn');
+            if (closeBtn) {
+                setTimeout(function() {
+                    closeBtn.focus();
+                }, 100);
+            }
             console.log('Preview panel opened');
         }
     }
@@ -1663,6 +1749,47 @@ if (submitBtn) {
     // ============================================
     // KEYBOARD ACCESSIBILITY (M6.4)
     // ============================================
+
+    // ============================================
+    // STICKY TOOLBAR BEHAVIOR (M4.1)
+    // ============================================
+
+    function initStickyToolbar() {
+        const toolbar = document.getElementById('toolbar');
+        if (!toolbar) return;
+
+        // Check if toolbar is sticky (position: sticky already in CSS)
+        // Add shadow enhancement on scroll for visual feedback
+        let isSticky = false;
+
+        function checkStickyState() {
+            const rect = toolbar.getBoundingClientRect();
+            const isCurrentlySticky = rect.top <= 0;
+
+            if (isCurrentlySticky !== isSticky) {
+                isSticky = isCurrentlySticky;
+                if (isSticky) {
+                    toolbar.classList.add('sticky-shadow');
+                } else {
+                    toolbar.classList.remove('sticky-shadow');
+                }
+            }
+        }
+
+        // Check on scroll
+        window.addEventListener('scroll', checkStickyState, { passive: true });
+
+        // Check on resize (in case layout changes)
+        window.addEventListener('resize', checkStickyState, { passive: true });
+
+        // Initial check
+        setTimeout(checkStickyState, 100);
+
+        console.log('✓ Sticky Toolbar initialized');
+    }
+
+    // Initialize sticky toolbar
+    initStickyToolbar();
 
     // ============================================
     // M6.5 — BASIC REQUIRED FIELD VALIDATION
@@ -2111,12 +2238,50 @@ if (submitBtn) {
     // Trap focus inside preview panel when open
     previewPanel.addEventListener('keydown', function(event) {
         if (event.key === 'Tab') {
+            // Get all focusable elements inside the panel
             const focusableElements = previewPanel.querySelectorAll(
-                'button, [tabindex]:not([tabindex="-1"])'
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
             );
+
+            if (focusableElements.length === 0) {
+                // Fallback: if no focusable elements, focus the panel itself
+                previewPanel.setAttribute('tabindex', '-1');
+                previewPanel.focus();
+                event.preventDefault();
+                return;
+            }
+
             const firstElement = focusableElements[0];
             const lastElement = focusableElements[focusableElements.length - 1];
 
+            // Ensure close button is first in focus order
+            const closeBtn = document.getElementById('preview-close-btn');
+            if (closeBtn && focusableElements[0] !== closeBtn) {
+                // Reorder: put close button first
+                const elementsArray = Array.from(focusableElements);
+                const closeIndex = elementsArray.indexOf(closeBtn);
+                if (closeIndex > 0) {
+                    elementsArray.splice(closeIndex, 1);
+                    elementsArray.unshift(closeBtn);
+                    // Update focusableElements to use the reordered array
+                    const newFirst = elementsArray[0];
+                    const newLast = elementsArray[elementsArray.length - 1];
+                    if (event.shiftKey) {
+                        if (document.activeElement === newFirst) {
+                            newLast.focus();
+                            event.preventDefault();
+                        }
+                    } else {
+                        if (document.activeElement === newLast) {
+                            newFirst.focus();
+                            event.preventDefault();
+                        }
+                    }
+                    return;
+                }
+            }
+
+            // Original focus trapping logic
             if (event.shiftKey) {
                 if (document.activeElement === firstElement) {
                     lastElement.focus();
@@ -2160,6 +2325,143 @@ if (submitBtn) {
     window.executeFieldInsertion = executeFieldInsertion;
     window.handleUpgradeAction = handleUpgradeAction;
 
+    // ============================================
+    // M6.1B — EDITOR WRITING FONT SIZE CONTROL (ALL FIELDS)
+    // ============================================
+
+    const fontIncreaseBtn = document.getElementById('font-increase-btn');
+    const fontDecreaseBtn = document.getElementById('font-decrease-btn');
+
+    // Font size configuration
+    const FONT_SIZE_CONFIG = {
+        minSize: 14,      // Minimum font size in pixels
+        maxSize: 28,      // Maximum font size in pixels
+        defaultSize: 16,  // Default font size in pixels
+        step: 1           // Increment/decrement step (1px)
+    };
+
+    // Store current font size
+    let currentFontSize = FONT_SIZE_CONFIG.defaultSize;
+
+    /**
+     * Get all editable writing fields in the editor
+     * Includes all textareas and editable text inputs
+     * @returns {NodeList} Collection of editable writing fields
+     */
+    function getEditableWritingFields() {
+        // Select all textareas and text inputs within the editor container
+        // Exclude hidden inputs, buttons, and non-editable fields
+        const editorContainer = document.querySelector('.editor-container');
+        if (!editorContainer) return [];
+
+        // Get all textareas and text inputs
+        const fields = editorContainer.querySelectorAll('textarea, input[type="text"]');
+        return fields;
+    }
+
+    /**
+     * Apply font size to ALL editable writing fields
+     * @param {number} size - The font size in pixels
+     */
+    function applyFontSize(size) {
+        // Clamp size to min/max
+        const clampedSize = Math.min(
+            Math.max(size, FONT_SIZE_CONFIG.minSize),
+            FONT_SIZE_CONFIG.maxSize
+        );
+
+        // Get all editable writing fields
+        const fields = getEditableWritingFields();
+
+        if (fields.length === 0) {
+            console.warn('⚠ No editable writing fields found');
+            return;
+        }
+
+        // Apply font size to all fields
+        fields.forEach(field => {
+            field.style.fontSize = clampedSize + 'px';
+            // Adjust line-height proportionally for better readability
+            field.style.lineHeight = (clampedSize * 1.8) + 'px';
+        });
+
+        // Store current size
+        currentFontSize = clampedSize;
+
+        // Log for console verification
+        console.log(`📝 Font size changed to: ${clampedSize}px (applied to ${fields.length} fields)`);
+    }
+
+    /**
+     * Increase font size
+     */
+    function increaseFontSize() {
+        const newSize = currentFontSize + FONT_SIZE_CONFIG.step;
+        if (newSize <= FONT_SIZE_CONFIG.maxSize) {
+            applyFontSize(newSize);
+            console.log(`🔍 A+ clicked: ${currentFontSize}px (max: ${FONT_SIZE_CONFIG.maxSize}px)`);
+        } else {
+            console.log(`⚠️ A+ clicked: Already at maximum (${FONT_SIZE_CONFIG.maxSize}px)`);
+        }
+    }
+
+    /**
+     * Decrease font size
+     */
+    function decreaseFontSize() {
+        const newSize = currentFontSize - FONT_SIZE_CONFIG.step;
+        if (newSize >= FONT_SIZE_CONFIG.minSize) {
+            applyFontSize(newSize);
+            console.log(`🔍 A− clicked: ${currentFontSize}px (min: ${FONT_SIZE_CONFIG.minSize}px)`);
+        } else {
+            console.log(`⚠️ A− clicked: Already at minimum (${FONT_SIZE_CONFIG.minSize}px)`);
+        }
+    }
+
+    /**
+     * Initialize font size control
+     */
+    function initFontSizeControl() {
+        console.log('🔤 Initializing Editor Font Size Control (All Fields)...');
+
+        // Apply default font size on load to ALL fields
+        const fields = getEditableWritingFields();
+        if (fields.length > 0) {
+            applyFontSize(FONT_SIZE_CONFIG.defaultSize);
+            console.log(`  ✓ Default font size: ${FONT_SIZE_CONFIG.defaultSize}px applied to ${fields.length} fields`);
+        } else {
+            console.warn('  ⚠ No editable writing fields found');
+        }
+
+        // Add event listeners to toolbar buttons
+        if (fontIncreaseBtn) {
+            fontIncreaseBtn.addEventListener('click', increaseFontSize);
+            console.log('  ✓ A+ button listener attached');
+        } else {
+            console.warn('  ⚠ A+ button not found');
+        }
+
+        if (fontDecreaseBtn) {
+            fontDecreaseBtn.addEventListener('click', decreaseFontSize);
+            console.log('  ✓ A− button listener attached');
+        } else {
+            console.warn('  ⚠ A− button not found');
+        }
+
+        console.log(`✅ Font size control initialized (${FONT_SIZE_CONFIG.minSize}px - ${FONT_SIZE_CONFIG.maxSize}px, step: ${FONT_SIZE_CONFIG.step}px)`);
+        console.log(`   Fields targeted: ${fields.length} editable writing fields`);
+    }
+
+    // Initialize font size control
+    initFontSizeControl();
+
+    // Expose for testing
+    window.increaseFontSize = increaseFontSize;
+    window.decreaseFontSize = decreaseFontSize;
+    window.applyFontSize = applyFontSize;
+    window.getCurrentFontSize = function() { return currentFontSize; };
+    window.getEditableWritingFields = getEditableWritingFields;
+
     console.log('Daily Bible Reflection Notepad v0.1 loaded');
     console.log('Template Level Detection available: window.detectTemplateLevel()');
     console.log('Template Switch Engine available: window.executeTemplateSwitch(target)');
@@ -2168,4 +2470,4 @@ if (submitBtn) {
     console.log('  - Free switching between Level 1, 2, 3');
     console.log('  - Field insertion/removal automated');
     console.log('  - Field values preserved');
-}
+    console.log('Font Size Control available: window.increaseFontSize(), window.decreaseFontSize()');

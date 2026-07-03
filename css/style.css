@@ -135,6 +135,9 @@ body {
 
 /* SECTION LAYOUTS */
 #toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     padding: 16px 20px;
     background: var(--color-bg-toolbar);
     border-radius: 12px;
@@ -143,83 +146,274 @@ body {
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* TOOLBAR LAYOUT */
-.toolbar-container {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
+/* Sticky toolbar shadow enhancement when scrolled */
+#toolbar.sticky-shadow {
+    box-shadow: 0 4px 16px var(--color-shadow-medium);
+    border-color: var(--color-border-medium);
 }
 
 /* ============================================
-   TOOLBAR BUTTONS - UPDATED M6.3
+   TOOLBAR LAYOUT - 3-COLUMN GRID (RECOMMENDED)
    ============================================ */
-.toolbar-btn {
-    padding: 8px 16px;
-    background-color: var(--color-bg-hover);
+.toolbar {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px;
+    gap: 10px;
+    padding: 10px;
+    background: var(--color-bg-toolbar);
+    border: 1px solid transparent;   /* ← Keeps the space but invisible */
+    border-radius: 12px;
+    align-items: stretch;
+    min-height: 88px;
+}
+
+/* ============================================
+   CENTER SECTION - 2x2 GRID
+   ============================================ */
+.toolbar-center {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+/* ============================================
+   TOOLBAR BUTTONS
+   ============================================ */
+.toolbar button,
+.toolbar .toolbar-btn {
     border: 1px solid var(--color-border-medium);
-    border-radius: 6px;
+    border-radius: 8px;
+    background: var(--color-bg-hover);
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
     font-family: inherit;
     color: var(--color-text-button);
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
     user-select: none;
     outline: none;
+    text-align: center;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    min-height: 40px;
+    padding: 8px 12px;
 }
 
-.toolbar-btn:hover {
-    background-color: #e4e4e4;
-    border-color: #b8b8b8;
+.toolbar button:hover,
+.toolbar .toolbar-btn:hover {
+    background: var(--color-bg-active);
+    border-color: var(--color-border-medium);
 }
 
-.toolbar-btn:active {
-    background-color: #d0d0d0;
-    border-color: #a8a8a8;
+.toolbar button:active,
+.toolbar .toolbar-btn:active {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
     transform: scale(0.97);
 }
 
-.toolbar-btn:focus {
+/* ============================================
+   FOCUS INDICATOR
+   ============================================ */
+.toolbar button:focus-visible,
+.toolbar .toolbar-btn:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
     border-color: var(--color-primary);
 }
 
-.toolbar-btn:focus:not(:focus-visible) {
+.toolbar button:focus:not(:focus-visible),
+.toolbar .toolbar-btn:focus:not(:focus-visible) {
     box-shadow: none;
+    border-color: var(--color-border-medium);
 }
 
-.toolbar-btn:focus-visible {
+/* ============================================
+   ZOOM BUTTONS - Fixed size, full height
+   ============================================ */
+.zoom-btn {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-height: 88px;
+    width: 100%;
+    max-width: 58px;
+    justify-self: center;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border-medium);
+    border-radius: 8px;
+    background: var(--color-bg-hover);
+    cursor: pointer;
+    color: var(--color-text-button);
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.zoom-btn:hover {
+    background: var(--color-bg-active);
+    border-color: var(--color-border-medium);
+}
+
+.zoom-btn:active {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
+    transform: scale(0.97);
+}
+
+.zoom-btn:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
     border-color: var(--color-primary);
 }
 
-/* RESPONSIVE TOOLBAR */
-@media (max-width: 480px) {
-    .toolbar-container {
-        gap: 6px;
-    }
-
-    .toolbar-btn {
-        padding: 6px 12px;
-        font-size: 12px;
-        flex: 1 1 auto;
-        min-width: 60px;
-        text-align: center;
-    }
+#font-increase-btn {
+    font-size: 28px;
 }
 
-@media (max-width: 380px) {
-    .toolbar-container {
-        flex-direction: column;
+#font-decrease-btn {
+    font-size: 28px;
+}
+
+/* ============================================
+   EDITOR FONT SIZE CONTROL
+   ============================================ */
+.template-input,
+.template-textarea {
+    transition: font-size 0.15s ease;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE (< 480px)
+   ============================================ */
+@media (max-width: 480px) {
+    .toolbar {
+        grid-template-columns: 44px 1fr 44px;
+        gap: 4px;
+        padding: 2px 2px;
+        min-height: 64px;
+        border-radius: 8px;
+    }
+
+    .toolbar-center {
         gap: 4px;
     }
 
-    .toolbar-btn {
-        width: 100%;
-        padding: 8px;
+    .toolbar button,
+    .toolbar .toolbar-btn {
+        font-size: 14px;
+        min-height: 28px;
+        padding: 4px 4px;
+        border-radius: 4px;
+    }
+
+    .zoom-btn {
+        font-size: 20px;
+        min-height: 64px;
+        max-width: 42px;
+        border-radius: 4px;
+        padding: 1px 2px;
+    }
+
+    #font-increase-btn {
+        font-size: 20px;
+    }
+
+    #font-decrease-btn {
+        font-size: 20px;
     }
 }
+
+/* ============================================
+   EXTRA SMALL (< 380px)
+   ============================================ */
+@media (max-width: 380px) {
+    .toolbar {
+        grid-template-columns: 44px 1fr 44px;
+        gap: 4px;
+        padding: 2px 2px;
+        min-height: 64px;
+        border-radius: 8px;
+    }
+
+    .toolbar-center {
+        gap: 4px;
+    }
+
+    .toolbar button,
+    .toolbar .toolbar-btn {
+        font-size: 14px;
+        min-height: 28px;
+        padding: 4px 4px;
+        border-radius: 4px;
+    }
+
+    .zoom-btn {
+        font-size: 20px;
+        min-height: 64px;
+        max-width: 42px;
+        border-radius: 4px;
+        padding: 1px 2px;
+    }
+
+    #font-increase-btn {
+        font-size: 20px;
+    }
+
+    #font-decrease-btn {
+        font-size: 20px;
+    }
+}
+
+/* ============================================
+   INTERACTION FEEDBACK SYSTEM (M4.5)
+   ============================================ */
+
+/* Toolbar Button Feedback */
+.toolbar-btn:hover {
+    background-color: var(--color-bg-active);
+    border-color: var(--color-border-medium);
+    transition: all 0.15s ease;
+}
+
+.toolbar-btn:active {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+    transform: scale(0.97);
+    transition: all 0.08s ease;
+}
+
+/* ============================================
+   FOCUS INDICATOR SYSTEM (M4.4)
+   ============================================ */
+
+/* Unified focus indicator using theme tokens */
+.toolbar-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
+    border-color: var(--color-primary);
+}
+
+/* Fallback for browsers without :focus-visible support */
+.toolbar-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
+    border-color: var(--color-primary);
+}
+
+/* Remove focus ring on mouse click (Windows/Chrome behavior) */
+.toolbar-btn:focus:not(:focus-visible) {
+    box-shadow: none;
+    border-color: var(--color-border-medium);
+}
+
 
 #editor {
     padding: 0;
@@ -271,7 +465,7 @@ body {
     padding: 10px 14px !important;
     border: 1.5px solid var(--color-border-input);
     border-radius: 6px;
-    font-size: 16px;
+    /* font-size removed — let JavaScript control it */
     font-family: inherit;
     background-color: var(--color-bg-input);
     color: var(--color-text-primary);
@@ -289,7 +483,7 @@ body {
     outline: none;
     border-color: var(--color-primary);
     background-color: var(--color-bg-surface);
-    box-shadow: 0 0 0 4px var(--color-primary-focus);
+    box-shadow: 0 0 0 3px var(--color-primary-focus);
     transform: scale(1.005);
 }
 
@@ -321,12 +515,14 @@ body {
     padding: 10px 14px !important;
     border: 1.5px solid var(--color-border-input);
     border-radius: 6px;
-    font-size: 16px;
+    /* font-size removed — let JavaScript control it */
     font-family: inherit;
     background-color: var(--color-bg-input);
     color: var(--color-text-primary);
     min-height: 160px;
-    resize: vertical;
+    /* Phase 2.1 Auto-Expanding Text Areas */
+    overflow: hidden;
+    resize: none;
     min-width: 0;
     width: 100%;
     transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease, color 0.3s ease;
@@ -341,7 +537,7 @@ body {
     outline: none;
     border-color: var(--color-primary);
     background-color: var(--color-bg-surface);
-    box-shadow: 0 0 0 4px var(--color-primary-focus);
+    box-shadow: 0 0 0 3px var(--color-primary-focus);
     transform: scale(1.005);
 }
 
@@ -384,13 +580,16 @@ body {
 
     .template-input,
     .template-textarea {
-        font-size: 14px !important;
+        /* font-size removed — let JavaScript control it */
         padding: 8px 10px !important;
         line-height: 1.6;
     }
 
     .template-textarea {
         min-height: 120px !important;
+        /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
+        overflow: hidden !important;
+        resize: none !important;
     }
 }
 
@@ -412,33 +611,38 @@ body {
     .template-input,
     .template-textarea {
         width: 100%;
-        font-size: 16px !important;
+        /* font-size removed — let JavaScript control it */
         padding: 12px 14px !important;
         line-height: 1.6;
     }
 
     .template-textarea {
         min-height: 140px !important;
+        /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
+        overflow: hidden !important;
+        resize: none !important;
     }
 }
-
 @media (max-width: 380px) {
     .template-field {
         padding: 8px 0 !important;
     }
 
     .template-field label {
-        font-size: 12px !important;
+        font-size: 14px !important;
     }
 
     .template-input,
     .template-textarea {
-        font-size: 15px !important;
+        /* font-size removed — let JavaScript control it */
         padding: 10px 12px !important;
     }
 
     .template-textarea {
         min-height: 120px !important;
+        /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
+        overflow: hidden !important;
+        resize: none !important;
     }
 }
 
@@ -631,9 +835,12 @@ body {
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
     outline: none;
     font-family: inherit;
+    /* Touch feedback enhancement */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .dialog-btn-primary {
@@ -644,11 +851,13 @@ body {
 
 .dialog-btn-primary:hover {
     background: var(--color-primary-hover);
+    transition: all 0.15s ease;
 }
 
 .dialog-btn-primary:active {
     background: var(--color-primary-active);
     transform: scale(0.97);
+    transition: all 0.08s ease;
 }
 
 .dialog-btn-primary:disabled {
@@ -657,16 +866,18 @@ body {
     opacity: 0.7;
 }
 
+.dialog-btn-primary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
+}
+
 .dialog-btn-primary:focus {
+    outline: none;
     box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
 }
 
 .dialog-btn-primary:focus:not(:focus-visible) {
     box-shadow: none;
-}
-
-.dialog-btn-primary:focus-visible {
-    box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
 }
 
 .dialog-btn-secondary {
@@ -716,6 +927,9 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 999;
+    /* Ensure panel captures focus */
+    pointer-events: auto;
+    touch-action: none;
 }
 
 .preview-container {
@@ -763,29 +977,41 @@ body {
     cursor: pointer;
     padding: 4px 8px;
     border-radius: 6px;
-    transition: all 0.2s ease;
+    transition: color 0.15s ease, background-color 0.15s ease, transform 0.08s ease;
     outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    /* Touch feedback enhancement */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .preview-close-btn:hover {
     color: var(--color-text-primary);
     background: rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease;
 }
 
 .preview-close-btn:active {
-    transform: scale(0.9);
+    transform: scale(0.93);
+    transition: all 0.08s ease;
+}
+
+.preview-close-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
 }
 
 .preview-close-btn:focus {
+    outline: none;
     box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
 }
 
 .preview-close-btn:focus:not(:focus-visible) {
     box-shadow: none;
-}
-
-.preview-close-btn:focus-visible {
-    box-shadow: 0 0 0 3px var(--color-primary-focus-strong);
 }
 
 .preview-content {
@@ -1214,3 +1440,789 @@ body {
         transform: translateY(0);
     }
 }
+
+/* ================================
+   M5.1 — READING COMFORT
+   ================================ */
+
+/* Editor Reading Comfort — Reflection Field */
+.template-textarea[data-field="reflection"] {
+    width: 100%;
+    max-width: 100%;
+    line-height: 1.7;
+    padding: 16px;
+    /* font-size removed — let JavaScript control it */
+    letter-spacing: 0.2px;
+    word-spacing: 0.5px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* All textarea fields - Base Comfort */
+.template-textarea {
+    line-height: 1.7;
+    padding: 14px;
+    /* font-size removed — let JavaScript control it */
+    letter-spacing: 0.2px;
+    /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
+    overflow: hidden;
+    resize: none;
+}
+
+/* Paragraph Rhythm */
+p {
+    line-height: 1.75;
+    margin-bottom: 12px;
+}
+
+/* Editor Container Breathing Space */
+.editor-container {
+    padding: 28px;
+}
+
+/* Section Spacing */
+.form-group {
+    margin-bottom: 14px;
+}
+
+/* ================================
+   FIX: TEMPLATE FIELD LAYOUT
+   ================================ */
+
+/* Make template fields stack vertically */
+.template-field {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 4px;
+}
+
+/* Labels should be above the input */
+.template-field label {
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+/* Textareas should fill the container width */
+.template-field .template-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: auto;
+}
+
+/* Helper text should be below the textarea */
+.template-field .helper-text,
+.template-field #reflection-helper {
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: auto;
+    margin-top: 2px;
+}
+
+/* Fix: Ensure all inputs in template fields are full width */
+.template-field .template-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: auto;
+}
+
+/* Field errors should also be full width */
+.template-field .field-error {
+    width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: auto;
+}
+
+/* Toolbar Separation */
+.toolbar-container {
+    margin-bottom: 18px;
+    padding: 10px 12px;
+}
+
+/* ================================
+   M5.2 — TYPOGRAPHY REFINEMENT
+   ================================ */
+
+/* 1. Consistent Font Stack */
+:root {
+    --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-family-heading: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-family-mono: "Courier New", monospace;
+}
+
+body,
+input,
+textarea,
+button,
+select,
+.label,
+.helper-text,
+.placeholder-text {
+    font-family: var(--font-family-base);
+}
+
+/* 2. Heading Hierarchy */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-family-heading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+}
+
+/* 3. Label Readability */
+label,
+.label,
+.form-label,
+.field-label {
+    font-family: var(--font-family-base);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    color: var(--color-text-primary, #2a2420);
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
+/* 4. Placeholder Text */
+::placeholder,
+.placeholder-text {
+    font-family: var(--font-family-base);
+    font-size: 14px;
+    font-weight: 400;
+    color: #9a928a;
+    letter-spacing: 0.2px;
+    opacity: 1;
+    font-style: normal;
+}
+
+/* Placeholder for textareas */
+.template-textarea::placeholder {
+    font-size: 14px;
+    color: #9a928a;
+    font-style: normal;
+}
+
+/* 5. Metadata Readability */
+.metadata,
+.meta-field,
+.meta-label,
+.meta-value,
+.date-display,
+.time-display,
+.devotion-number,
+.crown-count,
+.location-display {
+    font-family: var(--font-family-base);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    color: var(--color-text-secondary, #5a5048);
+}
+
+.meta-label {
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--color-text-secondary, #5a5048);
+}
+
+.meta-value {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--color-text-primary, #2a2420);
+}
+
+/* 6. Toolbar Typography */
+.toolbar-container .btn,
+.toolbar-container button,
+.toolbar .btn,
+.toolbar button {
+    font-family: var(--font-family-base);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+/* 7. Form Rhythm — Consistent Typography */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+textarea,
+select,
+.template-input,
+.template-textarea {
+    font-family: var(--font-family-base);
+    /* font-size removed — let JavaScript control it */
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    line-height: 1.6;
+    color: var(--color-text-primary, #2a2420);
+}
+
+/* Helper Text */
+.helper-text,
+.help-text,
+.form-helper,
+.field-helper {
+    font-family: var(--font-family-base);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    color: #7a726a;
+    margin-top: 4px;
+    line-height: 1.5;
+}
+
+/* 8. Visual Hierarchy — Section Headers */
+.section-title,
+.editor-section-title,
+.metadata-section-title,
+.prayer-section-title,
+.application-section-title {
+    font-family: var(--font-family-heading);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: var(--color-text-primary, #2a2420);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Editor Section Header */
+.editor-section .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: var(--color-text-secondary, #5a5048);
+    margin-bottom: 6px;
+}
+
+/* Title / App Header */
+.app-title,
+.app-header h1,
+.site-title {
+    font-family: var(--font-family-heading);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--color-text-primary, #2a2420);
+}
+
+.app-subtitle,
+.app-header .subtitle {
+    font-family: var(--font-family-base);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    color: #7a726a;
+}
+
+/* Crown Count Styling */
+.crown-display,
+.crown-count {
+    font-family: var(--font-family-base);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: #d4a843;
+}
+
+/* Status / Footer Typography */
+.status-bar,
+.editor-status,
+.footer-text {
+    font-family: var(--font-family-base);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    color: #9a928a;
+}
+
+/* ================================
+   M5.3 — ACCESSIBILITY REFINEMENT
+   ================================ */
+
+/* 1. Focus Visibility — Keyboard Focus Ring */
+:focus-visible {
+    outline: 3px solid #1a6b9e;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Fallback for browsers that don't support :focus-visible */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* 2. Focus for Textareas and Inputs */
+.template-textarea:focus-visible,
+.template-input:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #1a6b9e;
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* 3. Focus for Buttons */
+.btn:focus-visible,
+button:focus-visible,
+.toolbar-container .btn:focus-visible {
+    outline: 3px solid #1a6b9e;
+    outline-offset: 2px;
+    border-radius: 6px;
+    box-shadow: 0 0 0 4px rgba(26, 107, 158, 0.15);
+}
+
+/* 4. High Contrast Focus — Dark Theme */
+.dark-theme :focus-visible,
+[data-theme="dark"] :focus-visible {
+    outline: 3px solid #66b5ff;
+    outline-offset: 2px;
+}
+
+/* 5. Skip Link */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    padding: 12px 20px;
+    background: #1a6b9e;
+    color: #ffffff;
+    font-weight: 600;
+    z-index: 10000;
+    border-radius: 0 0 8px 0;
+    text-decoration: none;
+    font-family: var(--font-family-base, system-ui, sans-serif);
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* 6. Improved Label Contrast */
+label,
+.label,
+.form-label,
+.field-label {
+    color: #1a1614;
+    font-weight: 600;
+}
+
+/* 7. Helper Text Contrast */
+.helper-text,
+.help-text,
+.form-helper,
+.field-helper {
+    color: #4a423a;
+    font-size: 13px;
+}
+
+/* 8. Placeholder Contrast */
+::placeholder {
+    color: #7a726a;
+    opacity: 1;
+}
+
+/* 9. Required Field Indicator */
+.required-indicator {
+    color: #c0392b;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+/* 10. Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* EXCEPTION: Export toast should still animate smoothly */
+    #export-confirmation {
+        animation-duration: 0.4s !important;
+        transition-duration: 0.3s !important;
+    }
+
+    #export-confirmation.show {
+        animation: slideInRight 0.4s ease-out forwards !important;
+    }
+
+    #export-confirmation.hide {
+        animation: slideOutRight 0.3s ease-in forwards !important;
+    }
+}
+
+/* 11. Screen Reader Only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* ================================
+   M5.4 — MOBILE READING EXPERIENCE
+   ================================ */
+
+/* NOTE: M5.3 focus and toast styles are preserved.
+   Only mobile-specific styles are added below. */
+
+/* 1. Mobile Typography & Spacing */
+/* 1. Mobile Typography & Spacing */
+@media (max-width: 480px) {
+    body {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    h1 {
+        font-size: 22px;
+        letter-spacing: -0.02em;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    label,
+    .label,
+    .form-label,
+    .field-label {
+        font-size: 14px;
+        letter-spacing: 0.2px;
+    }
+
+    .helper-text,
+    .help-text,
+    .form-helper,
+    .field-helper {
+        font-size: 12px;
+    }
+
+    .meta-field {
+        font-size: 13px;
+    }
+
+    .app-header h1 {
+        font-size: 20px;
+    }
+
+    .app-header .subtitle {
+        font-size: 13px;
+    }
+}
+
+/* 2. Mobile Spacing & Layout */
+@media (max-width: 480px) {
+    .app-container,
+    .container {
+        padding: 12px;
+    }
+
+    .editor-container {
+        padding: 12px;
+    }
+
+    .template-field {
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .template-field label {
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .template-textarea {
+        padding: 10px 12px;
+        font-size: 15px;
+        min-height: 100px;
+    }
+
+    .template-input {
+        padding: 8px 10px;
+        font-size: 15px;
+    }
+
+    .field-error {
+        font-size: 12px;
+        padding: 2px 0;
+    }
+
+    p {
+        margin-bottom: 10px;
+        line-height: 1.7;
+    }
+
+    .section-title {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+}
+
+/* 3. Touch Targets — Mobile (44px minimum) */
+@media (max-width: 768px) {
+    .toolbar-container .btn,
+    .toolbar-container button,
+    .toolbar .btn,
+    .toolbar button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .dialog-btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .preview-close-btn,
+    .validation-close-btn {
+        min-height: 44px;
+        min-width: 44px;
+        font-size: 20px;
+    }
+
+    .template-option {
+        min-height: 44px;
+        padding: 8px 12px;
+    }
+}
+
+/* 4. Touch Targets — Extra Small */
+@media (max-width: 480px) {
+    .toolbar-container .btn,
+    .toolbar-container button,
+    .toolbar .btn,
+    .toolbar button {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .dialog-btn {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .preview-close-btn,
+    .validation-close-btn {
+        min-height: 48px;
+        min-width: 48px;
+        font-size: 22px;
+    }
+}
+
+/* 5. Editor Reading Area — Mobile */
+@media (max-width: 480px) {
+    .template-textarea[data-field="reflection"] {
+        min-height: 160px;
+        padding: 12px 14px;
+        font-size: 16px;
+        line-height: 1.8;
+        letter-spacing: 0.3px;
+    }
+}
+
+/* 6. Responsive Metadata Layout */
+@media (max-width: 600px) {
+    .meta-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px 0;
+    }
+
+    .meta-field {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 8px;
+        padding: 2px 0;
+    }
+
+    .meta-field label {
+        min-width: 80px;
+        font-size: 14px;
+    }
+
+    .meta-field .value {
+        font-size: 14px;
+        padding: 4px 10px;
+        flex: 1;
+        min-width: 60px;
+    }
+}
+
+/* 7. Viewport Stability */
+@media (max-width: 768px) {
+    .app-container,
+    .container,
+    .editor-container {
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    .template-field {
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .template-textarea,
+    .template-input {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* 8. Tablet Specific Adjustments */
+@media (min-width: 481px) and (max-width: 768px) {
+    .app-container,
+    .container {
+        padding: 16px;
+    }
+
+    .editor-container {
+        padding: 16px;
+    }
+
+    .template-textarea {
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+
+    .toolbar-container .btn,
+    .toolbar-container button {
+        min-height: 44px;
+        padding: 8px 14px;
+    }
+}
+
+/* 9. Maintain Desktop Experience */
+@media (min-width: 769px) {
+    .app-container,
+    .container {
+        padding: 24px;
+    }
+
+    .editor-container {
+        padding: 28px;
+    }
+
+    .template-textarea {
+        font-size: 16px;
+        padding: 16px;
+    }
+
+    .meta-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 24px;
+    }
+}
+
+/* ================================
+   FIX: RESTORE FOCUS OUTLINE (M5.4)
+   ================================ */
+
+/* Override any outline: none that might be applied */
+*:focus-visible {
+    outline: 3px solid #1a6b9e !important;
+    outline-style: solid !important;
+    outline-offset: 2px !important;
+    border-radius: 4px !important;
+}
+
+.template-textarea:focus-visible,
+.template-input:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #1a6b9e !important;
+    outline-style: solid !important;
+    outline-offset: 2px !important;
+    border-radius: 6px !important;
+    overflow: visible !important;
+}
+
+.btn:focus-visible,
+button:focus-visible,
+.toolbar-container .btn:focus-visible {
+    outline: 3px solid #1a6b9e !important;
+    outline-style: solid !important;
+    outline-offset: 2px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 0 0 4px rgba(26, 107, 158, 0.15) !important;
+}
+
+/* Prevent outline clipping */
+.template-field,
+.editor-container,
+.toolbar-container {
+    overflow: visible !important;
+}
+
