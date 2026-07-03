@@ -1296,6 +1296,11 @@ if (submitBtn) {
             // Standard single-line fields
             lines.push(`${fieldName}: ${displayValue}`);
         }
+
+        // R5.2: Insert blank line after Application if it has content
+        if (fieldName === 'Application' && value && value.trim() !== '') {
+            lines.push('');  // Blank line after Application before Time End
+        }
         }
 
         // AT-6: Footer preserved unchanged
