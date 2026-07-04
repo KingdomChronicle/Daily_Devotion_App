@@ -1,8 +1,12 @@
 /* ============================================
-   THEME TOKEN SYSTEM - WARM DEVOTIONAL EDITION
+   THEME TOKEN SYSTEM - COMPLETE 6 THEMES
+   ============================================ */
+
+/* ============================================
+   LIGHT THEME (DEFAULT)
    ============================================ */
 :root {
-    /* Scripture Light Theme (Default) - Warm Devotional */
+    /* Primary Colors */
     --color-primary: #6b7fc7;
     --color-primary-hover: #5a6db5;
     --color-primary-active: #4a5ba0;
@@ -10,6 +14,7 @@
     --color-primary-focus: rgba(107, 127, 199, 0.25);
     --color-primary-focus-strong: rgba(107, 127, 199, 0.4);
 
+    /* Background Colors */
     --color-bg-page: #f5f0eb;
     --color-bg-surface: #faf5f0;
     --color-bg-input: #fcf8f4;
@@ -17,38 +22,55 @@
     --color-bg-active: #ede8f2;
     --color-bg-toolbar: #faf5f0;
 
+    /* Text Colors */
     --color-text-primary: #2a2420;
     --color-text-secondary: #5a5048;
     --color-text-placeholder: #b0a898;
     --color-text-button: #2a2420;
 
+    /* Border Colors */
     --color-border-light: #e0d8d0;
     --color-border-medium: #c8c0b8;
     --color-border-input: #ccc4bc;
     --color-border-field: #e8e0d8;
     --color-border-preview: #d8d0c8;
 
+    /* Shadow Colors */
     --color-shadow-light: rgba(80, 60, 40, 0.06);
     --color-shadow-medium: rgba(80, 60, 40, 0.25);
     --color-shadow-overlay: rgba(40, 30, 20, 0.5);
 
+    /* Validation Colors */
     --color-validation-warning: #8a6a3a;
     --color-validation-error: #c45a4a;
     --color-validation-bg: #f5ece0;
     --color-validation-border: #d4b88a;
 
+    /* Export & Readonly Colors */
     --color-export-bg: #6b7fc7;
     --color-export-text: #faf5f0;
-
     --color-readonly-bg: #ede8e0;
     --color-readonly-border: #d8d0c8;
 
+    /* Dialog Colors */
     --color-dialog-bg: #faf5f0;
     --color-dialog-shadow: rgba(80, 60, 40, 0.25);
     --color-dialog-border: #e0d8d0;
+
+    /* Phase 7B - New Tokens */
+    --color-text-inverse: #faf5f0;
+    --color-primary-disabled: #a0c4e8;
+    --color-accent-gold: #d4a843;
+    --color-shadow-warning: rgba(255, 193, 7, 0.15);
+    --color-selection-bg: #b3d4fc;
+    --color-selection-text: #2a2420;
+    --color-scrollbar-track: #f0e8e0;
+    --color-scrollbar-thumb: #c8c0b8;
 }
 
-/* Night Devotion Theme - Warm Devotional */
+/* ============================================
+   DARK THEME
+   ============================================ */
 [data-theme="dark"] {
     --color-primary: #8a9fd6;
     --color-primary-hover: #7a8fc9;
@@ -86,16 +108,254 @@
 
     --color-export-bg: #8a9fd6;
     --color-export-text: #14100e;
-
     --color-readonly-bg: #1e1a18;
     --color-readonly-border: #2a2420;
 
     --color-dialog-bg: #1c1714;
     --color-dialog-shadow: rgba(0, 0, 0, 0.6);
     --color-dialog-border: #2a2420;
+
+    --color-text-inverse: #14100e;
+    --color-primary-disabled: #4a5ba0;
+    --color-accent-gold: #c4a040;
+    --color-shadow-warning: rgba(200, 160, 50, 0.2);
+    --color-selection-bg: #3a5a7a;
+    --color-selection-text: #e8ddd0;
+    --color-scrollbar-track: #2a2420;
+    --color-scrollbar-thumb: #3a322e;
 }
 
-/* CSS RESET */
+/* ============================================
+   SEPIA THEME
+   ============================================ */
+[data-theme="sepia"] {
+    --color-primary: #b8956a;
+    --color-primary-hover: #a8845a;
+    --color-primary-active: #98744a;
+    --color-primary-light: #f5ece0;
+    --color-primary-focus: rgba(184, 149, 106, 0.25);
+    --color-primary-focus-strong: rgba(184, 149, 106, 0.4);
+
+    --color-bg-page: #f4ede4;
+    --color-bg-surface: #f8f2ea;
+    --color-bg-input: #fcf8f2;
+    --color-bg-hover: #ede4d8;
+    --color-bg-active: #f0e8dc;
+    --color-bg-toolbar: #f8f2ea;
+
+    --color-text-primary: #3d3228;
+    --color-text-secondary: #7a6a58;
+    --color-text-placeholder: #c0b0a0;
+    --color-text-button: #3d3228;
+
+    --color-border-light: #e0d4c8;
+    --color-border-medium: #d0c4b8;
+    --color-border-input: #d4c8bc;
+    --color-border-field: #e8dcd0;
+    --color-border-preview: #dcd0c4;
+
+    --color-shadow-light: rgba(120, 80, 40, 0.06);
+    --color-shadow-medium: rgba(120, 80, 40, 0.25);
+    --color-shadow-overlay: rgba(60, 40, 20, 0.5);
+
+    --color-validation-warning: #a08050;
+    --color-validation-error: #c06040;
+    --color-validation-bg: #f5ece0;
+    --color-validation-border: #d4c0a0;
+
+    --color-export-bg: #b8956a;
+    --color-export-text: #f8f2ea;
+    --color-readonly-bg: #ede4d8;
+    --color-readonly-border: #dcd0c4;
+
+    --color-dialog-bg: #f8f2ea;
+    --color-dialog-shadow: rgba(120, 80, 40, 0.25);
+    --color-dialog-border: #e0d4c8;
+
+    --color-text-inverse: #f8f2ea;
+    --color-primary-disabled: #d4c0b0;
+    --color-accent-gold: #c4a060;
+    --color-shadow-warning: rgba(200, 160, 80, 0.15);
+    --color-selection-bg: #d4c8b8;
+    --color-selection-text: #3d3228;
+    --color-scrollbar-track: #ede4d8;
+    --color-scrollbar-thumb: #d0c4b8;
+}
+
+/* ============================================
+   FOREST THEME
+   ============================================ */
+[data-theme="forest"] {
+    --color-primary: #5a8a5a;
+    --color-primary-hover: #4a7a4a;
+    --color-primary-active: #3a6a3a;
+    --color-primary-light: #e8f0e4;
+    --color-primary-focus: rgba(90, 138, 90, 0.25);
+    --color-primary-focus-strong: rgba(90, 138, 90, 0.4);
+
+    --color-bg-page: #f0f2ea;
+    --color-bg-surface: #f5f7f0;
+    --color-bg-input: #fafcf5;
+    --color-bg-hover: #e8ede0;
+    --color-bg-active: #eaf0e4;
+    --color-bg-toolbar: #f5f7f0;
+
+    --color-text-primary: #2a3a28;
+    --color-text-secondary: #5a6a50;
+    --color-text-placeholder: #a8b898;
+    --color-text-button: #2a3a28;
+
+    --color-border-light: #d8e0d0;
+    --color-border-medium: #c0ceb8;
+    --color-border-input: #c8d4c0;
+    --color-border-field: #e0e8d8;
+    --color-border-preview: #d4dcc8;
+
+    --color-shadow-light: rgba(40, 60, 30, 0.06);
+    --color-shadow-medium: rgba(40, 60, 30, 0.2);
+    --color-shadow-overlay: rgba(20, 40, 10, 0.5);
+
+    --color-validation-warning: #8a7a40;
+    --color-validation-error: #b85a4a;
+    --color-validation-bg: #f0f0e0;
+    --color-validation-border: #c8b88a;
+
+    --color-export-bg: #5a8a5a;
+    --color-export-text: #f5f7f0;
+    --color-readonly-bg: #e8ede0;
+    --color-readonly-border: #d4dcc8;
+
+    --color-dialog-bg: #f5f7f0;
+    --color-dialog-shadow: rgba(40, 60, 30, 0.25);
+    --color-dialog-border: #d8e0d0;
+
+    --color-text-inverse: #f5f7f0;
+    --color-primary-disabled: #b0c8a8;
+    --color-accent-gold: #b8a850;
+    --color-shadow-warning: rgba(180, 160, 60, 0.15);
+    --color-selection-bg: #c8d8bc;
+    --color-selection-text: #2a3a28;
+    --color-scrollbar-track: #e8ede0;
+    --color-scrollbar-thumb: #c0ceb8;
+}
+
+/* ============================================
+   OCEAN THEME
+   ============================================ */
+[data-theme="ocean"] {
+    --color-primary: #4a8db7;
+    --color-primary-hover: #3a7da7;
+    --color-primary-active: #2a6d97;
+    --color-primary-light: #e4f0f8;
+    --color-primary-focus: rgba(74, 141, 183, 0.25);
+    --color-primary-focus-strong: rgba(74, 141, 183, 0.4);
+
+    --color-bg-page: #eef4f8;
+    --color-bg-surface: #f5f8fa;
+    --color-bg-input: #fafcfd;
+    --color-bg-hover: #e8eef2;
+    --color-bg-active: #eaf0f5;
+    --color-bg-toolbar: #f5f8fa;
+
+    --color-text-primary: #1a2a38;
+    --color-text-secondary: #4a5a68;
+    --color-text-placeholder: #98a8b8;
+    --color-text-button: #1a2a38;
+
+    --color-border-light: #d0dce4;
+    --color-border-medium: #b8c8d4;
+    --color-border-input: #c0d0dc;
+    --color-border-field: #d8e4ec;
+    --color-border-preview: #ccd8e0;
+
+    --color-shadow-light: rgba(20, 50, 80, 0.06);
+    --color-shadow-medium: rgba(20, 50, 80, 0.2);
+    --color-shadow-overlay: rgba(10, 30, 50, 0.5);
+
+    --color-validation-warning: #7a8a50;
+    --color-validation-error: #b85a4a;
+    --color-validation-bg: #e8f0ec;
+    --color-validation-border: #b8c8a8;
+
+    --color-export-bg: #4a8db7;
+    --color-export-text: #f5f8fa;
+    --color-readonly-bg: #e8eef2;
+    --color-readonly-border: #ccd8e0;
+
+    --color-dialog-bg: #f5f8fa;
+    --color-dialog-shadow: rgba(20, 50, 80, 0.25);
+    --color-dialog-border: #d0dce4;
+
+    --color-text-inverse: #f5f8fa;
+    --color-primary-disabled: #a8c8d8;
+    --color-accent-gold: #c4a850;
+    --color-shadow-warning: rgba(60, 140, 200, 0.15);
+    --color-selection-bg: #b8d4e8;
+    --color-selection-text: #1a2a38;
+    --color-scrollbar-track: #e8eef2;
+    --color-scrollbar-thumb: #b8c8d4;
+}
+
+/* ============================================
+   MIDNIGHT THEME
+   ============================================ */
+[data-theme="midnight"] {
+    --color-primary: #6a9fc7;
+    --color-primary-hover: #5a8fb7;
+    --color-primary-active: #4a7fa7;
+    --color-primary-light: #1a2a3a;
+    --color-primary-focus: rgba(106, 159, 199, 0.3);
+    --color-primary-focus-strong: rgba(106, 159, 199, 0.5);
+
+    --color-bg-page: #0a0e14;
+    --color-bg-surface: #121820;
+    --color-bg-input: #1a222c;
+    --color-bg-hover: #1e2834;
+    --color-bg-active: #16202a;
+    --color-bg-toolbar: #121820;
+
+    --color-text-primary: #e8edf2;
+    --color-text-secondary: #a0aab8;
+    --color-text-placeholder: #5a6a7a;
+    --color-text-button: #e8edf2;
+
+    --color-border-light: #1e2a34;
+    --color-border-medium: #2a3642;
+    --color-border-input: #2a3642;
+    --color-border-field: #1a222c;
+    --color-border-preview: #1e2a34;
+
+    --color-shadow-light: rgba(0, 0, 0, 0.4);
+    --color-shadow-medium: rgba(0, 0, 0, 0.7);
+    --color-shadow-overlay: rgba(0, 0, 0, 0.85);
+
+    --color-validation-warning: #b8a860;
+    --color-validation-error: #d06a5a;
+    --color-validation-bg: #1a1a14;
+    --color-validation-border: #5a4a3a;
+
+    --color-export-bg: #6a9fc7;
+    --color-export-text: #0a0e14;
+    --color-readonly-bg: #1a222c;
+    --color-readonly-border: #2a3642;
+
+    --color-dialog-bg: #121820;
+    --color-dialog-shadow: rgba(0, 0, 0, 0.8);
+    --color-dialog-border: #2a3642;
+
+    --color-text-inverse: #0a0e14;
+    --color-primary-disabled: #3a4a5a;
+    --color-accent-gold: #c4a850;
+    --color-shadow-warning: rgba(106, 159, 199, 0.2);
+    --color-selection-bg: #2a4a6a;
+    --color-selection-text: #e8edf2;
+    --color-scrollbar-track: #1a222c;
+    --color-scrollbar-thumb: #2a3642;
+}
+
+/* ============================================
+   CSS RESET
+   ============================================ */
 *,
 *::before,
 *::after {
@@ -104,7 +364,9 @@
     box-sizing: border-box;
 }
 
-/* BASE TYPOGRAPHY */
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
 html {
     scroll-behavior: smooth;
 }
@@ -120,7 +382,9 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* PAGE STRUCTURE */
+/* ============================================
+   PAGE STRUCTURE
+   ============================================ */
 #app {
     max-width: 100%;
     margin: 0 auto;
@@ -133,7 +397,9 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* SECTION LAYOUTS */
+/* ============================================
+   TOOLBAR
+   ============================================ */
 #toolbar {
     position: sticky;
     top: 0;
@@ -146,30 +412,23 @@ body {
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Sticky toolbar shadow enhancement when scrolled */
 #toolbar.sticky-shadow {
     box-shadow: 0 4px 16px var(--color-shadow-medium);
     border-color: var(--color-border-medium);
 }
 
-/* ============================================
-   TOOLBAR LAYOUT - 3-COLUMN GRID (RECOMMENDED)
-   ============================================ */
 .toolbar {
     display: grid;
-    grid-template-columns: 60px 1fr 60px;
-    gap: 10px;
+    grid-template-columns: 44px 1fr 44px;
+    gap: 8px;
     padding: 10px;
     background: var(--color-bg-toolbar);
-    border: 1px solid transparent;   /* ← Keeps the space but invisible */
+    border: 1px solid transparent;
     border-radius: 12px;
     align-items: stretch;
     min-height: 88px;
 }
 
-/* ============================================
-   CENTER SECTION - 2x2 GRID
-   ============================================ */
 .toolbar-center {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -197,7 +456,7 @@ body {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     min-height: 40px;
-    padding: 8px 12px;
+    padding: 8px 14px;
 }
 
 .toolbar button:hover,
@@ -213,9 +472,6 @@ body {
     transform: scale(0.97);
 }
 
-/* ============================================
-   FOCUS INDICATOR
-   ============================================ */
 .toolbar button:focus-visible,
 .toolbar .toolbar-btn:focus-visible {
     outline: none;
@@ -230,7 +486,7 @@ body {
 }
 
 /* ============================================
-   ZOOM BUTTONS - Fixed size, full height
+   ZOOM BUTTONS
    ============================================ */
 .zoom-btn {
     font-size: 28px;
@@ -283,14 +539,6 @@ body {
 }
 
 /* ============================================
-   EDITOR FONT SIZE CONTROL
-   ============================================ */
-.template-input,
-.template-textarea {
-    transition: font-size 0.15s ease;
-}
-
-/* ============================================
    MOBILE RESPONSIVE (< 480px)
    ============================================ */
 @media (max-width: 480px) {
@@ -310,8 +558,14 @@ body {
     .toolbar .toolbar-btn {
         font-size: 14px;
         min-height: 28px;
+        min-width: auto;
         padding: 4px 4px;
         border-radius: 4px;
+        flex: 0 1 auto;
+    }
+
+    .theme-placeholder {
+        display: none !important;
     }
 
     .zoom-btn {
@@ -355,6 +609,10 @@ body {
         border-radius: 4px;
     }
 
+    .theme-placeholder {
+        display: none !important;
+    }
+
     .zoom-btn {
         font-size: 20px;
         min-height: 64px;
@@ -369,6 +627,40 @@ body {
 
     #font-decrease-btn {
         font-size: 20px;
+    }
+}
+
+/* ============================================
+   DESKTOP TOOLBAR REFINEMENT (>= 769px)
+   ============================================ */
+@media (min-width: 769px) {
+    .toolbar-center {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        justify-content: center;
+        align-items: stretch;
+    }
+
+    .toolbar-center .toolbar-btn {
+        min-width: 70px;
+        max-width: 100px;
+        padding: 8px 12px;
+        flex: 0 1 auto;
+    }
+
+    .toolbar-center .theme-placeholder {
+        min-width: 70px;
+        max-width: 80px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .zoom-btn {
+        max-width: 44px;
+        min-height: 60px;
+        font-size: 24px;
     }
 }
 
@@ -465,7 +757,6 @@ body {
     padding: 10px 14px !important;
     border: 1.5px solid var(--color-border-input);
     border-radius: 6px;
-    /* font-size removed — let JavaScript control it */
     font-family: inherit;
     background-color: var(--color-bg-input);
     color: var(--color-text-primary);
@@ -515,12 +806,10 @@ body {
     padding: 10px 14px !important;
     border: 1.5px solid var(--color-border-input);
     border-radius: 6px;
-    /* font-size removed — let JavaScript control it */
     font-family: inherit;
     background-color: var(--color-bg-input);
     color: var(--color-text-primary);
     min-height: 160px;
-    /* Phase 2.1 Auto-Expanding Text Areas */
     overflow: hidden;
     resize: none;
     min-width: 0;
@@ -580,14 +869,12 @@ body {
 
     .template-input,
     .template-textarea {
-        /* font-size removed — let JavaScript control it */
         padding: 8px 10px !important;
         line-height: 1.6;
     }
 
     .template-textarea {
         min-height: 120px !important;
-        /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
         overflow: hidden !important;
         resize: none !important;
     }
@@ -611,14 +898,12 @@ body {
     .template-input,
     .template-textarea {
         width: 100%;
-        /* font-size removed — let JavaScript control it */
         padding: 12px 14px !important;
         line-height: 1.6;
     }
 
     .template-textarea {
         min-height: 140px !important;
-        /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
         overflow: hidden !important;
         resize: none !important;
     }
@@ -634,13 +919,11 @@ body {
 
     .template-input,
     .template-textarea {
-        /* font-size removed — let JavaScript control it */
         padding: 10px 12px !important;
     }
 
     .template-textarea {
         min-height: 120px !important;
-        /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
         overflow: hidden !important;
         resize: none !important;
     }
@@ -838,7 +1121,6 @@ body {
     transition: background-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
     outline: none;
     font-family: inherit;
-    /* Touch feedback enhancement */
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
@@ -861,7 +1143,7 @@ body {
 }
 
 .dialog-btn-primary:disabled {
-    background: #a0c4e8;
+    background: var(--color-primary-disabled);
     cursor: not-allowed;
     opacity: 0.7;
 }
@@ -888,13 +1170,13 @@ body {
 }
 
 .dialog-btn-secondary:hover {
-    background: #e4e4e4;
-    border-color: #b8b8b8;
+    background: var(--color-bg-hover);
+    border-color: var(--color-border-medium);
 }
 
 .dialog-btn-secondary:active {
-    background: #d0d0d0;
-    border-color: #a8a8a8;
+    background: var(--color-bg-active);
+    border-color: var(--color-border-medium);
     transform: scale(0.97);
 }
 
@@ -927,7 +1209,6 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 999;
-    /* Ensure panel captures focus */
     pointer-events: auto;
     touch-action: none;
 }
@@ -984,14 +1265,13 @@ body {
     justify-content: center;
     min-width: 44px;
     min-height: 44px;
-    /* Touch feedback enhancement */
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
 
 .preview-close-btn:hover {
     color: var(--color-text-primary);
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--color-shadow-light);
     transition: all 0.15s ease;
 }
 
@@ -1115,6 +1395,7 @@ body {
     min-width: 130px;
     flex-shrink: 0;
     transition: color 0.3s ease;
+    font-size: 16px;
 }
 
 .preview-field-value {
@@ -1139,6 +1420,7 @@ body {
 .preview-multiline .preview-field-label {
     min-width: unset;
     margin-bottom: 4px;
+    font-size: 16px;
 }
 
 .preview-multiline .preview-field-value {
@@ -1162,7 +1444,7 @@ body {
 
     .preview-field-label {
         min-width: unset;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .preview-field-value {
@@ -1181,7 +1463,7 @@ body {
     }
 
     .preview-field-label {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .preview-field-value {
@@ -1278,8 +1560,6 @@ body {
     transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Duplicate block removed */
-
 #export-confirmation.hidden {
     opacity: 0;
     pointer-events: none;
@@ -1352,7 +1632,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.15);
+    box-shadow: 0 2px 8px var(--color-shadow-warning);
     animation: validationSlideDown 0.3s ease;
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
@@ -1442,6 +1722,47 @@ body {
 }
 
 /* ================================
+   TEXT SELECTION & SCROLLBAR STYLING
+   ================================ */
+
+/* Text Selection */
+::selection {
+    background: var(--color-selection-bg);
+    color: var(--color-selection-text);
+}
+
+::-moz-selection {
+    background: var(--color-selection-bg);
+    color: var(--color-selection-text);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-scrollbar-track);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-scrollbar-thumb);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-medium);
+}
+
+/* Firefox Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
+}
+
+/* ================================
    M5.1 — READING COMFORT
    ================================ */
 
@@ -1451,7 +1772,6 @@ body {
     max-width: 100%;
     line-height: 1.7;
     padding: 16px;
-    /* font-size removed — let JavaScript control it */
     letter-spacing: 0.2px;
     word-spacing: 0.5px;
     border-radius: 10px;
@@ -1462,9 +1782,7 @@ body {
 .template-textarea {
     line-height: 1.7;
     padding: 14px;
-    /* font-size removed — let JavaScript control it */
     letter-spacing: 0.2px;
-    /* Phase 2.1 Auto-Expanding Text Areas - preserve behavior */
     overflow: hidden;
     resize: none;
 }
@@ -1613,7 +1931,7 @@ label,
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 0.3px;
-    color: var(--color-text-primary, #2a2420);
+    color: var(--color-text-primary);
     margin-bottom: 4px;
     display: inline-block;
 }
@@ -1624,7 +1942,7 @@ label,
     font-family: var(--font-family-base);
     font-size: 14px;
     font-weight: 400;
-    color: #9a928a;
+    color: var(--color-text-placeholder);
     letter-spacing: 0.2px;
     opacity: 1;
     font-style: normal;
@@ -1633,7 +1951,7 @@ label,
 /* Placeholder for textareas */
 .template-textarea::placeholder {
     font-size: 14px;
-    color: #9a928a;
+    color: var(--color-text-placeholder);
     font-style: normal;
 }
 
@@ -1651,7 +1969,7 @@ label,
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.2px;
-    color: var(--color-text-secondary, #5a5048);
+    color: var(--color-text-secondary);
 }
 
 .meta-label {
@@ -1659,13 +1977,13 @@ label,
     font-size: 13px;
     letter-spacing: 0.4px;
     text-transform: uppercase;
-    color: var(--color-text-secondary, #5a5048);
+    color: var(--color-text-secondary);
 }
 
 .meta-value {
     font-weight: 400;
     font-size: 14px;
-    color: var(--color-text-primary, #2a2420);
+    color: var(--color-text-primary);
 }
 
 /* 6. Toolbar Typography */
@@ -1692,11 +2010,10 @@ select,
 .template-input,
 .template-textarea {
     font-family: var(--font-family-base);
-    /* font-size removed — let JavaScript control it */
     font-weight: 400;
     letter-spacing: 0.2px;
     line-height: 1.6;
-    color: var(--color-text-primary, #2a2420);
+    color: var(--color-text-primary);
 }
 
 /* Helper Text */
@@ -1708,7 +2025,7 @@ select,
     font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.2px;
-    color: #7a726a;
+    color: var(--color-text-secondary);
     margin-top: 4px;
     line-height: 1.5;
 }
@@ -1723,7 +2040,7 @@ select,
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.2px;
-    color: var(--color-text-primary, #2a2420);
+    color: var(--color-text-primary);
     margin-bottom: 8px;
     padding-bottom: 4px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -1734,7 +2051,7 @@ select,
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.3px;
-    color: var(--color-text-secondary, #5a5048);
+    color: var(--color-text-secondary);
     margin-bottom: 6px;
 }
 
@@ -1747,7 +2064,7 @@ select,
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.2;
-    color: var(--color-text-primary, #2a2420);
+    color: var(--color-text-primary);
 }
 
 .app-subtitle,
@@ -1766,7 +2083,7 @@ select,
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.2px;
-    color: #d4a843;
+    color: var(--color-accent-gold);
 }
 
 /* Status / Footer Typography */
@@ -1777,7 +2094,7 @@ select,
     font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.3px;
-    color: #9a928a;
+    color: var(--color-text-placeholder);
 }
 
 /* ================================
@@ -1786,10 +2103,14 @@ select,
 
 /* 1. Focus Visibility — Keyboard Focus Ring */
 :focus-visible {
-    outline: 3px solid #1a6b9e;
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 4px;
 }
+
+/* ============================================
+   END OF THEME PREVIEW HOVER STATES
+   ============================================ */
 
 /* Fallback for browsers that don't support :focus-visible */
 :focus:not(:focus-visible) {
@@ -1801,7 +2122,7 @@ select,
 .template-input:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid #1a6b9e;
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 6px;
 }
@@ -1810,16 +2131,16 @@ textarea:focus-visible {
 .btn:focus-visible,
 button:focus-visible,
 .toolbar-container .btn:focus-visible {
-    outline: 3px solid #1a6b9e;
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
     border-radius: 6px;
-    box-shadow: 0 0 0 4px rgba(26, 107, 158, 0.15);
+    box-shadow: 0 0 0 4px var(--color-primary-focus);
 }
 
 /* 4. High Contrast Focus — Dark Theme */
 .dark-theme :focus-visible,
 [data-theme="dark"] :focus-visible {
-    outline: 3px solid #66b5ff;
+    outline: 3px solid var(--color-primary);
     outline-offset: 2px;
 }
 
@@ -1829,8 +2150,8 @@ button:focus-visible,
     top: -100%;
     left: 0;
     padding: 12px 20px;
-    background: #1a6b9e;
-    color: #ffffff;
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
     font-weight: 600;
     z-index: 10000;
     border-radius: 0 0 8px 0;
@@ -1847,7 +2168,7 @@ label,
 .label,
 .form-label,
 .field-label {
-    color: #1a1614;
+    color: var(--color-text-primary);
     font-weight: 600;
 }
 
@@ -1856,19 +2177,19 @@ label,
 .help-text,
 .form-helper,
 .field-helper {
-    color: #4a423a;
+    color: var(--color-text-secondary);
     font-size: 13px;
 }
 
 /* 8. Placeholder Contrast */
 ::placeholder {
-    color: #7a726a;
+    color: var(--color-text-placeholder);
     opacity: 1;
 }
 
 /* 9. Required Field Indicator */
 .required-indicator {
-    color: #c0392b;
+    color: var(--color-validation-error);
     font-weight: 700;
     margin-left: 2px;
 }
@@ -1884,7 +2205,6 @@ label,
         scroll-behavior: auto !important;
     }
 
-    /* EXCEPTION: Export toast should still animate smoothly */
     #export-confirmation {
         animation-duration: 0.4s !important;
         transition-duration: 0.3s !important;
@@ -1915,10 +2235,6 @@ label,
    M5.4 — MOBILE READING EXPERIENCE
    ================================ */
 
-/* NOTE: M5.3 focus and toast styles are preserved.
-   Only mobile-specific styles are added below. */
-
-/* 1. Mobile Typography & Spacing */
 /* 1. Mobile Typography & Spacing */
 @media (max-width: 480px) {
     body {
@@ -2192,7 +2508,7 @@ label,
 
 /* Override any outline: none that might be applied */
 *:focus-visible {
-    outline: 3px solid #1a6b9e !important;
+    outline: 3px solid var(--color-primary) !important;
     outline-style: solid !important;
     outline-offset: 2px !important;
     border-radius: 4px !important;
@@ -2202,7 +2518,7 @@ label,
 .template-input:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid #1a6b9e !important;
+    outline: 3px solid var(--color-primary) !important;
     outline-style: solid !important;
     outline-offset: 2px !important;
     border-radius: 6px !important;
@@ -2212,11 +2528,11 @@ textarea:focus-visible {
 .btn:focus-visible,
 button:focus-visible,
 .toolbar-container .btn:focus-visible {
-    outline: 3px solid #1a6b9e !important;
+    outline: 3px solid var(--color-primary) !important;
     outline-style: solid !important;
     outline-offset: 2px !important;
     border-radius: 6px !important;
-    box-shadow: 0 0 0 4px rgba(26, 107, 158, 0.15) !important;
+    box-shadow: 0 0 0 4px var(--color-primary-focus) !important;
 }
 
 /* Prevent outline clipping */
@@ -2226,3 +2542,131 @@ button:focus-visible,
     overflow: visible !important;
 }
 
+/* ============================================
+   PHASE 7D — TOUCH BEHAVIOR SAFETY
+   ============================================ */
+
+/**
+ * Touch Interaction Safety Layer
+ *
+ * Prevents horizontal scroll conflicts while preserving vertical scroll.
+ * Active zones allow swipe gestures, excluded zones block them.
+ */
+
+#app {
+    touch-action: pan-y;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Allow text selection in inputs and textareas */
+input,
+textarea,
+[contenteditable="true"] {
+    touch-action: auto;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* Toolbar and dialogs block swipe gestures */
+.toolbar,
+.dialog-overlay,
+.preview-container {
+    touch-action: auto;
+}
+
+/* Smooth touch feedback */
+.template-field,
+.editor-container {
+    -webkit-touch-callout: none;
+}
+
+/* Prevent horizontal overflow on mobile */
+@media (max-width: 768px) {
+    #app {
+        overflow-x: hidden;
+    }
+}
+
+/* ============================================
+   THEME COLOR SWATCHES (Phase 7C-4.1A)
+   ============================================ */
+
+/**
+ * Theme Color Swatches — Permanent Visual Indicators
+ *
+ * Each theme option displays a small color swatch beside the radio button.
+ * Swatches are decorative only — no runtime interaction.
+ *
+ * Architecture:
+ * - PURE CSS — No JavaScript required
+ * - DECORATIVE ONLY — No interaction
+ * - STATIC COLORS — Hardcoded, not from CSS variables
+ * - ACCESSIBLE — aria-hidden="true" on swatches
+ */
+
+.theme-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0 4px 0 2px;
+    vertical-align: middle;
+}
+
+/* ============================================
+   SWATCH COLORS
+   ============================================ */
+
+/* Light Theme — Warm cream/light gray */
+.theme-swatch-light {
+    background-color: #f5f0eb;
+    border-color: #d0c8c0;
+}
+
+/* Dark Theme — Charcoal/dark */
+.theme-swatch-dark {
+    background-color: #14100e;
+    border-color: #3a322e;
+}
+
+/* Sepia Theme — Warm brown */
+.theme-swatch-sepia {
+    background-color: #f4ede4;
+    border-color: #b8956a;
+}
+
+/* Forest Theme — Forest green */
+.theme-swatch-forest {
+    background-color: #5a8a5a;
+    border-color: #4a7a4a;
+}
+
+/* Ocean Theme — Ocean blue */
+.theme-swatch-ocean {
+    background-color: #4a8db7;
+    border-color: #3a7da7;
+}
+
+/* Midnight Theme — Deep navy */
+.theme-swatch-midnight {
+    background-color: #0a0e14;
+    border-color: #2a3642;
+}
+
+/* ============================================
+   RESPONSIVE — SWATCHES
+   ============================================ */
+
+@media (max-width: 480px) {
+    .theme-swatch {
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+    }
+}

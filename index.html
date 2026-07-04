@@ -19,12 +19,13 @@
                     <!-- Left: Zoom In -->
                     <button class="zoom-btn" id="font-increase-btn" aria-label="Increase font size">A+</button>
 
-                    <!-- Center: Main Actions - 2x2 Grid -->
+                    <!-- Center: Main Actions - Desktop Single Row -->
                     <div class="toolbar-center">
-                        <button class="toolbar-btn" aria-label="Start a new reflection">New</button>
+                        <button class="toolbar-btn" id="new-btn" aria-label="Start a new reflection">New</button>
                         <button class="toolbar-btn" id="level-selector-btn" aria-label="Switch template level">Level</button>
                         <button class="toolbar-btn" id="preview-btn" aria-label="Preview reflection">Preview</button>
                         <button class="toolbar-btn" id="export-btn" aria-label="Export reflection">Export</button>
+                        <button class="toolbar-btn theme-placeholder" id="theme-btn" aria-label="Toggle theme (placeholder)">Theme</button>
                     </div>
 
                     <!-- Right: Zoom Out -->
@@ -155,6 +156,54 @@
         </div>
     </aside>
 
+    <!-- ===== THEME SELECTOR DIALOG (Phase 7C-4.1) ===== -->
+    <aside id="theme-selector-dialog" class="dialog-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="theme-dialog-title">
+        <div class="dialog-container">
+            <div class="dialog-header">
+                <h2 id="theme-dialog-title">Select Theme</h2>
+            </div>
+            <div class="dialog-body">
+                <p id="theme-dialog-context">Current Theme: <span id="theme-current-display">Light</span></p>
+                <div class="theme-options" role="radiogroup" aria-label="Theme selection">
+                    <label class="template-option theme-option">
+                        <input type="radio" name="theme-select" value="light">
+                        <span class="theme-swatch theme-swatch-light" aria-hidden="true"></span>
+                        <span>Light</span>
+                    </label>
+                    <label class="template-option theme-option">
+                        <input type="radio" name="theme-select" value="dark">
+                        <span class="theme-swatch theme-swatch-dark" aria-hidden="true"></span>
+                        <span>Dark</span>
+                    </label>
+                    <label class="template-option theme-option">
+                        <input type="radio" name="theme-select" value="sepia">
+                        <span class="theme-swatch theme-swatch-sepia" aria-hidden="true"></span>
+                        <span>Sepia</span>
+                    </label>
+                    <label class="template-option theme-option">
+                        <input type="radio" name="theme-select" value="forest">
+                        <span class="theme-swatch theme-swatch-forest" aria-hidden="true"></span>
+                        <span>Forest</span>
+                    </label>
+                    <label class="template-option theme-option">
+                        <input type="radio" name="theme-select" value="ocean">
+                        <span class="theme-swatch theme-swatch-ocean" aria-hidden="true"></span>
+                        <span>Ocean</span>
+                    </label>
+                    <label class="template-option theme-option">
+                        <input type="radio" name="theme-select" value="midnight">
+                        <span class="theme-swatch theme-swatch-midnight" aria-hidden="true"></span>
+                        <span>Midnight</span>
+                    </label>
+                </div>
+            </div>
+            <div class="dialog-footer">
+                <button id="apply-theme-btn" class="dialog-btn dialog-btn-primary" aria-label="Apply selected theme (placeholder)">Apply</button>
+                <button id="cancel-theme-btn" class="dialog-btn dialog-btn-secondary" aria-label="Cancel and close theme dialog">Cancel</button>
+            </div>
+        </div>
+    </aside>
+
     <!-- Export Confirmation Message -->
     <div id="export-confirmation" style="display: none;" role="status" aria-live="polite">
         <div class="confirmation-content">
@@ -163,6 +212,7 @@
         </div>
     </div>
 
+    <script src="js/gesture/swipe.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

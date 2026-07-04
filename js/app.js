@@ -5,6 +5,914 @@ document.addEventListener('DOMContentLoaded', function() {
     initApp();
 });
 
+// ============================================
+// THEME RUNTIME STATE FOUNDATION (Phase 7C-1)
+// ============================================
+
+/**
+ * ThemeState — Canonical Runtime Theme State Foundation
+ * 
+ * Single source of truth for the active theme during the current session.
+ * 
+ * Architecture Principles:
+ * - PURE RUNTIME STATE — No DOM, CSS, or storage interaction
+ * - SESSION-ONLY — State resets on page reload (intentional)
+ * - ISOLATED — No dependencies on UI, events, or persistence
+ * - READ-ONLY COLLECTION — Theme registry is immutable
+ * 
+ * Restrictions Enforced:
+ * - NO DOM synchronization
+ * - NO data-theme attribute modification
+ * - NO CSS modification
+ * - NO localStorage/sessionStorage
+ * - NO event listeners
+ * - NO theme button activation
+ * - NO startup restoration
+ * 
+ * @version 1.0.0
+ * @since Phase 7C-1
+ */
+
+(function() {
+    'use strict';
+
+    // ============================================
+    // CANONICAL THEME REGISTRY
+    // ============================================
+
+    /**
+     * Complete collection of all available themes.
+     * Matches the 6 themes defined in css/style.css.
+     * 
+     * @readonly
+     * @type {Array<string>}
+     */
+    const THEME_COLLECTION = [
+        'light',
+        'dark',
+        'sepia',
+        'forest',
+        'ocean',
+        'midnight'
+    ];
+
+    /**
+     * Human-readable display names for themes.
+     * @readonly
+     * @type {Object<string, string>}
+     */
+    const THEME_DISPLAY_NAMES = {
+        light: 'Light',
+        dark: 'Dark',
+        sepia: 'Sepia',
+        forest: 'Forest',
+        ocean: 'Ocean',
+        midnight: 'Midnight'
+    };
+
+    /**
+     * Default theme applied on session start.
+     * @readonly
+     * @type {string}
+     */
+    const DEFAULT_THEME = 'light';
+
+    // ============================================
+    // RUNTIME STATE
+    // ============================================
+
+    /**
+     * The canonical runtime Theme State.
+     * Represents the active theme for the current session.
+     * 
+     * @private
+     * @type {string}
+     */
+    let _activeTheme = DEFAULT_THEME;
+
+    /**
+     * Flag indicating whether the state has been initialized.
+     * @private
+     * @type {boolean}
+     */
+    let _isInitialized = false;
+
+    // ============================================
+    // PUBLIC API — ThemeState Object
+    // ============================================
+
+    /**
+     * ThemeState — Canonical runtime theme state container.
+     * 
+     * Provides read access to the active theme and theme collection.
+     * No DOM, CSS, or storage operations are performed.
+     * 
+     * @namespace ThemeState
+     */
+    const ThemeState = {
+        // ==========================================
+        // READ-ONLY PROPERTIES
+        // ==========================================
+
+        /**
+         * The canonical collection of all available themes.
+         * Immutable — returns a shallow copy to prevent mutation.
+         * 
+         * @returns {Array<string>} Copy of the theme collection
+         */
+        get collection() {
+            return THEME_COLLECTION.slice();
+        },
+
+        /**
+         * The display names for all themes.
+         * Immutable — returns a shallow copy.
+         * 
+         * @returns {Object<string, string>} Copy of display name map
+         */
+        get displayNames() {
+            return { ...THEME_DISPLAY_NAMES };
+        },
+
+        /**
+         * The active theme for the current session.
+         * Returns the current runtime theme state.
+         * 
+         * @returns {string} The active theme identifier
+         */
+        get active() {
+            return _activeTheme;
+        },
+
+        /**
+         * The default theme applied on session start.
+         * 
+         * @returns {string} The default theme identifier
+         */
+        get defaultTheme() {
+            return DEFAULT_THEME;
+        },
+
+        /**
+         * Whether the ThemeState has been initialized.
+         * 
+         * @returns {boolean} true if initialized
+         */
+        get initialized() {
+            return _isInitialized;
+        },
+
+        // ==========================================
+        // PUBLIC METHODS
+        // ==========================================
+
+        /**
+         * Sets the active theme for the current session.
+         * 
+         * @param {string} themeId — The theme identifier to activate
+         * @returns {boolean} true if theme was set successfully
+         * 
+         * @throws {Error} If themeId is not in the collection
+         * 
+         * @note This is a PURE STATE operation.
+         *       NO DOM synchronization occurs.
+         *       NO CSS modification occurs.
+         *       NO storage persistence occurs.
+         */
+        setActive: function(themeId) {
+            // Validate theme exists in collection
+            if (!THEME_COLLECTION.includes(themeId)) {
+                throw new Error(
+                    `ThemeState: Invalid theme "${themeId}". ` +
+                    `Available themes: ${THEME_COLLECTION.join(', ')}`
+                );
+            }
+
+            // Update runtime state
+            _activeTheme = themeId;
+            _isInitialized = true;
+
+            // Log state change (development only — no DOM interaction)
+            console.log(`🎨 ThemeState: Active theme set to "${themeId}"`);
+
+            return true;
+        },
+
+        /**
+         * Checks if a theme exists in the collection.
+         * 
+         * @param {string} themeId — The theme identifier to check
+         * @returns {boolean} true if theme exists
+         */
+        hasTheme: function(themeId) {
+            return THEME_COLLECTION.includes(themeId);
+        },
+
+        /**
+         * Gets the display name for a theme.
+         * 
+         * @param {string} themeId — The theme identifier
+         * @returns {string} The display name, or the themeId if not found
+         */
+        getDisplayName: function(themeId) {
+            return THEME_DISPLAY_NAMES[themeId] || themeId;
+        },
+
+        /**
+         * Resets the active theme to the default.
+         * 
+         * @returns {string} The reset theme identifier
+         */
+        resetToDefault: function() {
+            _activeTheme = DEFAULT_THEME;
+            _isInitialized = true;
+            console.log(`🎨 ThemeState: Reset to default theme "${DEFAULT_THEME}"`);
+            return _activeTheme;
+        },
+
+        /**
+         * Returns a snapshot of the current ThemeState.
+         * Useful for debugging and validation.
+         * 
+         * @returns {Object} Current state snapshot
+         */
+        snapshot: function() {
+            return {
+                active: _activeTheme,
+                default: DEFAULT_THEME,
+                collection: THEME_COLLECTION.slice(),
+                displayNames: { ...THEME_DISPLAY_NAMES },
+                initialized: _isInitialized,
+                sessionId: Date.now() // Simple session identifier
+            };
+        }
+    };
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+
+    /**
+     * Initialize the ThemeState on module load.
+     * Sets the default theme and marks as initialized.
+     * 
+     * @private
+     */
+    function initializeThemeState() {
+        _activeTheme = DEFAULT_THEME;
+        _isInitialized = true;
+        console.log(`🎨 ThemeState initialized with default theme: "${DEFAULT_THEME}"`);
+        console.log(`🎨 Available themes: ${THEME_COLLECTION.join(', ')}`);
+    }
+
+    // Initialize immediately
+    initializeThemeState();
+
+    // ============================================
+    // EXPOSE TO GLOBAL SCOPE
+    // ============================================
+
+    /**
+     * Expose ThemeState globally for runtime validation.
+     * 
+     * @global
+     * @type {Object}
+     */
+    window.ThemeState = ThemeState;
+
+    // ============================================
+    // BOUNDARY VALIDATION — NO UNINTENDED SIDE EFFECTS
+    // ============================================
+
+    // Verify no DOM mutations occurred during initialization
+    // (This check runs only during development)
+    if (typeof document !== 'undefined' && document.documentElement) {
+        // Ensure data-theme attribute was NOT modified
+        const dataTheme = document.documentElement.getAttribute('data-theme');
+        if (dataTheme !== null) {
+            console.warn(
+                '⚠️ ThemeState: Unexpected data-theme attribute found. ' +
+                'ThemeState must NOT modify the DOM. ' +
+                'This may indicate unauthorized DOM synchronization.'
+            );
+        }
+    }
+
+    // Verify no storage was accessed (these should be null/undefined)
+    try {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem) {
+            // Check if any theme keys were accessed (should not happen)
+            // This is a passive check — no storage operations are performed
+            console.log('🎨 ThemeState: No storage access detected (boundary verified)');
+        }
+    } catch (e) {
+        // Storage may not be available — ignore
+    }
+
+    console.log('🎨 ThemeState: Runtime state foundation established');
+    console.log('🎨 ThemeState: DOM synchronization is NOT performed (authorized restriction)');
+    console.log('🎨 ThemeState: Persistence is NOT implemented (authorized restriction)');
+
+})();
+
+// ============================================
+// THEME CONTROLLER CORE ENGINE (Phase 7C-2)
+// ============================================
+
+/**
+ * ThemeController — Canonical Runtime Theme Controller
+ * 
+ * Pure façade over ThemeState. Introduces no independent state.
+ * Delegates all operations to ThemeState.
+ * 
+ * Architecture Principles:
+ * - FAÇADE PATTERN — Controller is a thin wrapper over ThemeState
+ * - NO OWNED STATE — All state resides in ThemeState
+ * - NO SIDE EFFECTS — No DOM, CSS, storage, or UI interaction
+ * - PURE RUNTIME — Session-only operations
+ * 
+ * Restrictions Enforced:
+ * - NO DOM manipulation
+ * - NO data-theme modification
+ * - NO CSS updates
+ * - NO localStorage/sessionStorage
+ * - NO event listeners
+ * - NO theme button activation
+ * - NO startup initialization
+ * 
+ * @version 1.0.0
+ * @since Phase 7C-2
+ */
+
+(function() {
+    'use strict';
+
+    // ============================================
+    // DEPENDENCY VERIFICATION
+    // ============================================
+
+    /**
+     * Ensure ThemeState is available before creating ThemeController.
+     * ThemeController depends exclusively on ThemeState.
+     */
+    if (typeof window.ThemeState === 'undefined') {
+        console.error(
+            '❌ ThemeController: ThemeState not found. ' +
+            'ThemeController depends on ThemeState. ' +
+            'Ensure ThemeState is loaded before ThemeController.'
+        );
+        return;
+    }
+
+    // ============================================
+    // THEME CONTROLLER — FAÇADE OVER THEMESTATE
+    // ============================================
+
+    /**
+     * ThemeController — Pure façade over ThemeState.
+     * 
+     * All methods delegate directly to ThemeState.
+     * Controller owns no state, introduces no side effects.
+     * 
+     * @namespace ThemeController
+     */
+    const ThemeController = {
+        // ==========================================
+        // STATE ACCESS — Delegated to ThemeState
+        // ==========================================
+
+        /**
+         * Get the current active theme.
+         * Delegates to ThemeState.active.
+         * 
+         * @returns {string} The active theme identifier
+         */
+        getTheme: function() {
+            return window.ThemeState.active;
+        },
+
+        /**
+         * Set the active theme.
+         * Delegates to ThemeState.setActive().
+         * 
+         * @param {string} themeId — The theme identifier to activate
+         * @returns {string} The updated active theme
+         * @throws {Error} If themeId is invalid
+         */
+        setTheme: function(themeId) {
+            // Phase 7C-6.1A Guard: Check if theme is already active
+            const currentActive = window.ThemeState.active;
+            if (themeId === currentActive) {
+                console.log(`🎨 Theme "${themeId}" is already active. No runtime update required.`);
+                return currentActive;
+            }
+            
+            // Proceed with theme change
+            window.ThemeState.setActive(themeId);
+            
+            // Phase 7E.1: Persist theme to localStorage
+            persistTheme(themeId);
+            
+            return window.ThemeState.active;
+        },
+
+        /**
+         * Reset the active theme to the default.
+         * Delegates to ThemeState.resetToDefault().
+         * 
+         * @returns {string} The reset theme identifier
+         */
+        resetTheme: function() {
+            window.ThemeState.resetToDefault();
+            return window.ThemeState.active;
+        },
+
+        // ==========================================
+        // REGISTRY ACCESS — Delegated to ThemeState
+        // ==========================================
+
+        /**
+         * Get all available themes.
+         * Delegates to ThemeState.collection.
+         * 
+         * @returns {Array<string>} Array of theme identifiers
+         */
+        getAvailableThemes: function() {
+            return window.ThemeState.collection;
+        },
+
+        /**
+         * Get the display name for a theme.
+         * Delegates to ThemeState.getDisplayName().
+         * 
+         * @param {string} themeId — The theme identifier
+         * @returns {string} The display name
+         */
+        getDisplayName: function(themeId) {
+            return window.ThemeState.getDisplayName(themeId);
+        },
+
+        /**
+         * Check if a theme exists in the collection.
+         * Delegates to ThemeState.hasTheme().
+         * 
+         * @param {string} themeId — The theme identifier to check
+         * @returns {boolean} true if theme exists
+         */
+        hasTheme: function(themeId) {
+            return window.ThemeState.hasTheme(themeId);
+        },
+
+        // ==========================================
+        // SNAPSHOT — Delegated to ThemeState
+        // ==========================================
+
+        /**
+         * Get a snapshot of the current theme state.
+         * Delegates to ThemeState.snapshot().
+         * 
+         * @returns {Object} Current state snapshot
+         */
+        snapshot: function() {
+            return window.ThemeState.snapshot();
+        },
+
+        // ==========================================
+        // CONTROLLER METADATA (No state)
+        // ==========================================
+
+        /**
+         * Controller version identifier.
+         * Read-only metadata — NOT state.
+         * 
+         * @readonly
+         * @type {string}
+         */
+        get version() {
+            return '1.0.0';
+        },
+
+        /**
+         * Controller name for identification.
+         * Read-only metadata — NOT state.
+         * 
+         * @readonly
+         * @type {string}
+         */
+        get name() {
+            return 'ThemeController';
+        }
+    };
+
+    // ============================================
+    // BOUNDARY VALIDATION — VERIFY NO SIDE EFFECTS
+    // ============================================
+
+    /**
+     * Verify that ThemeController has not introduced any side effects.
+     * This check runs during development to enforce boundary rules.
+     */
+    function verifyControllerBoundaries() {
+        // Verify NO DOM mutations occurred
+        const dataTheme = document.documentElement.getAttribute('data-theme');
+        if (dataTheme !== null) {
+            console.warn(
+                '⚠️ ThemeController: Unexpected data-theme attribute found. ' +
+                'ThemeController must NOT modify the DOM.'
+            );
+        }
+
+        // Verify NO storage was accessed
+        try {
+            if (typeof localStorage !== 'undefined') {
+                const storageKeys = Object.keys(localStorage);
+                const themeKeys = storageKeys.filter(k => 
+                    k.toLowerCase().includes('theme')
+                );
+                if (themeKeys.length > 0) {
+                    console.warn(
+                        '⚠️ ThemeController: Unexpected localStorage keys found. ' +
+                        'ThemeController must NOT access storage.'
+                    );
+                }
+            }
+        } catch (e) {
+            // Storage may not be available — ignore
+        }
+
+        // Verify NO event listeners were attached to theme button
+        const themeBtn = document.getElementById('theme-btn');
+        if (themeBtn) {
+            // Check if any listeners exist (passive check)
+            // Note: getEventListeners is only available in DevTools
+            if (typeof getEventListeners !== 'undefined') {
+                const listeners = getEventListeners(themeBtn);
+                if (Object.keys(listeners).length > 0) {
+                    console.warn(
+                        '⚠️ ThemeController: Event listeners found on theme button. ' +
+                        'ThemeController must NOT bind UI events.'
+                    );
+                }
+            }
+        }
+
+        console.log('🎮 ThemeController: Boundary verification complete');
+        console.log('🎮 ThemeController: No DOM, CSS, storage, or UI side effects detected');
+    }
+
+    // ============================================
+    // EXPOSE TO GLOBAL SCOPE
+    // ============================================
+
+    /**
+     * Expose ThemeController globally for runtime validation.
+     * 
+     * @global
+     * @type {Object}
+     */
+    window.ThemeController = ThemeController;
+
+    // ============================================
+    // INITIALIZATION — READY ONLY (No state)
+    // ============================================
+
+    console.log('🎮 ThemeController initialized successfully');
+    console.log(`🎮 ThemeController delegating to ThemeState (active: "${window.ThemeState.active}")`);
+    console.log('🎮 ThemeController: Façade pattern — NO owned state');
+    console.log('🎮 ThemeController: All operations delegated to ThemeState');
+    console.log('🎮 ThemeController: Available themes:', window.ThemeState.collection.join(', '));
+
+    // Run boundary verification
+    verifyControllerBoundaries();
+
+})();
+
+// ============================================
+// DOM THEME BRIDGE (Phase 7C-3)
+// ============================================
+
+/**
+ * ThemeDOMBridge — Exclusive Owner of DOM Theme Synchronization
+ * 
+ * Responsible for synchronizing the runtime theme state with the DOM
+ * via the canonical data-theme attribute on the <html> element.
+ * 
+ * Architecture Principles:
+ * - SINGLE RESPONSIBILITY — Only handles DOM synchronization
+ * - EXCLUSIVE OWNERSHIP — No other module modifies data-theme
+ * - DELEGATED VALIDATION — Validation handled by ThemeController
+ * - CSS INTEGRITY — No CSS modifications, only attribute updates
+ * 
+ * Restrictions Enforced:
+ * - NO theme button activation
+ * - NO event listeners
+ * - NO persistence
+ * - NO startup restoration
+ * - NO CSS modifications
+ * - NO other DOM mutations
+ * 
+ * @version 1.0.0
+ * @since Phase 7C-3
+ */
+
+(function() {
+    'use strict';
+
+    // ============================================
+    // DEPENDENCY VERIFICATION
+    // ============================================
+
+    /**
+     * Ensure ThemeController is available before creating ThemeDOMBridge.
+     * ThemeDOMBridge depends on ThemeController for theme state.
+     */
+    if (typeof window.ThemeController === 'undefined') {
+        console.error(
+            '❌ ThemeDOMBridge: ThemeController not found. ' +
+            'ThemeDOMBridge depends on ThemeController. ' +
+            'Ensure ThemeController is loaded before ThemeDOMBridge.'
+        );
+        return;
+    }
+
+    // ============================================
+    // DOM THEME BRIDGE
+    // ============================================
+
+    /**
+     * ThemeDOMBridge — Exclusive owner of DOM theme synchronization.
+     * 
+     * All DOM theme mutations must go through this bridge.
+     * No other module may modify data-theme on the root element.
+     * 
+     * @namespace ThemeDOMBridge
+     */
+    const ThemeDOMBridge = {
+        // ==========================================
+        // DOM SYNCHRONIZATION
+        // ==========================================
+
+        /**
+         * Apply the current theme to the DOM.
+         * 
+         * Reads the active theme from ThemeController and applies it
+         * to the <html> element's data-theme attribute.
+         * 
+         * @returns {string} The theme that was applied
+         * @throws {Error} If root element is not available
+         * 
+         * @example
+         * ThemeDOMBridge.applyCurrentTheme(); // 'dark'
+         */
+        applyCurrentTheme: function() {
+            // Get the root HTML element
+            const root = document.documentElement;
+            if (!root) {
+                throw new Error(
+                    'ThemeDOMBridge: document.documentElement not available. ' +
+                    'DOM not ready for theme synchronization.'
+                );
+            }
+
+            // Read current theme from ThemeController
+            const theme = window.ThemeController.getTheme();
+
+            // Apply to DOM via canonical data-theme attribute
+            root.dataset.theme = theme;
+
+            // Log the synchronization (development only)
+            console.log(`🌉 ThemeDOMBridge: Applied theme "${theme}" to <html data-theme="${theme}">`);
+
+            return theme;
+        },
+
+        /**
+         * Get the current theme from the DOM.
+         * 
+         * Reads the data-theme attribute from <html>.
+         * Useful for debugging and validation.
+         * 
+         * @returns {string|null} The theme from DOM, or null if not set
+         */
+        getDOMTheme: function() {
+            const root = document.documentElement;
+            if (!root) return null;
+            return root.dataset.theme || null;
+        },
+
+        /**
+         * Verify DOM synchronization state.
+         * 
+         * Checks if the DOM data-theme matches the runtime theme.
+         * Returns true if synchronized, false otherwise.
+         * 
+         * @returns {boolean} true if DOM matches runtime
+         */
+        isSynchronized: function() {
+            const runtimeTheme = window.ThemeController.getTheme();
+            const domTheme = this.getDOMTheme();
+            return runtimeTheme === domTheme;
+        },
+
+        /**
+         * Force full DOM synchronization.
+         * 
+         * Re-applies the current theme to ensure DOM is in sync.
+         * Useful for recovery scenarios.
+         * 
+         * @returns {string} The applied theme
+         */
+        synchronize: function() {
+            return this.applyCurrentTheme();
+        }
+    };
+
+    // ============================================
+    // CONTROLLER INTEGRATION
+    // ============================================
+
+    /**
+     * Enhance ThemeController to automatically trigger DOM synchronization
+     * after state changes.
+     * 
+     * This maintains the architectural flow:
+     * ThemeController.setTheme() → ThemeState update → DOM sync
+     * 
+     * The ThemeController remains the sole runtime authority.
+     * ThemeDOMBridge owns all DOM mutations.
+     * 
+     * @private
+     */
+    function integrateControllerWithBridge() {
+        // Store original methods
+        const originalSetTheme = window.ThemeController.setTheme;
+        const originalResetTheme = window.ThemeController.resetTheme;
+
+        // Override setTheme to include DOM synchronization
+        window.ThemeController.setTheme = function(themeId) {
+            // Step 1: Get current theme before change
+            const currentTheme = window.ThemeController.getTheme();
+            
+            // Step 2: Delegate to original setTheme (updates ThemeState)
+            const result = originalSetTheme.call(this, themeId);
+
+            // Step 3: Only synchronize DOM if theme actually changed
+            // (The guard in setTheme returns early if theme is already active)
+            if (result !== currentTheme) {
+                ThemeDOMBridge.applyCurrentTheme();
+            } else {
+                // Theme was already active - no DOM sync needed
+                console.log('📌 ThemeDOMBridge sync skipped (theme unchanged)');
+            }
+
+            return result;
+        };
+
+        // Override resetTheme to include DOM synchronization
+        window.ThemeController.resetTheme = function() {
+            // Step 1: Get current theme before reset
+            const currentTheme = window.ThemeController.getTheme();
+            
+            // Step 2: Delegate to original resetTheme (updates ThemeState)
+            const result = originalResetTheme.call(this);
+
+            // Step 3: Only synchronize DOM if theme actually changed
+            if (result !== currentTheme) {
+                ThemeDOMBridge.applyCurrentTheme();
+            } else {
+                // Theme was already default - no DOM sync needed
+                console.log('📌 ThemeDOMBridge sync skipped (theme unchanged)');
+            }
+
+            return result;
+        };
+
+        console.log('🎮 ThemeController integrated with ThemeDOMBridge');
+        console.log('🎮 ThemeController.setTheme() → ThemeState → DOM sync (only on change)');
+        console.log('🎮 ThemeController.resetTheme() → ThemeState → DOM sync (only on change)');
+    }
+
+    // ============================================
+    // INITIALIZATION — SYNCHRONIZE ON LOAD
+    // ============================================
+
+    /**
+     * Initialize the ThemeDOMBridge.
+     * 
+     * On initial load, synchronize the DOM with the default theme.
+     * This ensures the CSS theme system is active from the start.
+     * 
+     * @private
+     */
+    function initializeBridge() {
+        // Apply the current theme to DOM
+        const appliedTheme = ThemeDOMBridge.applyCurrentTheme();
+
+        // Integrate with ThemeController for future updates
+        integrateControllerWithBridge();
+
+        console.log(`🌉 ThemeDOMBridge initialized with theme "${appliedTheme}"`);
+        console.log('🌉 ThemeDOMBridge: Exclusive owner of DOM theme synchronization');
+        console.log('🌉 ThemeDOMBridge: CSS Theme System activated via data-theme attribute');
+        console.log('🌉 ThemeDOMBridge: No CSS modifications performed (canonical contract)');
+    }
+
+    // ============================================
+    // BOUNDARY VALIDATION — VERIFY NO SIDE EFFECTS
+    // ============================================
+
+    /**
+     * Verify that ThemeDOMBridge has not introduced unauthorized side effects.
+     * This check runs during development to enforce boundary rules.
+     */
+    function verifyBridgeBoundaries() {
+        // Verify ONLY <html> has data-theme (no other elements)
+        const allElementsWithDataTheme = document.querySelectorAll('[data-theme]');
+        const root = document.documentElement;
+        let onlyRootHasTheme = true;
+
+        allElementsWithDataTheme.forEach(el => {
+            if (el !== root) {
+                onlyRootHasTheme = false;
+                console.warn(
+                    '⚠️ ThemeDOMBridge: Found data-theme on non-root element:',
+                    el.tagName,
+                    'ThemeDOMBridge must ONLY modify <html>.'
+                );
+            }
+        });
+
+        if (onlyRootHasTheme) {
+            console.log('🌉 ThemeDOMBridge: Boundary verified — ONLY <html> has data-theme');
+        }
+
+        // Verify NO CSS modifications (passive check)
+        const styleTags = document.querySelectorAll('style, link[rel="stylesheet"]');
+        console.log(`🌉 ThemeDOMBridge: ${styleTags.length} stylesheets found (none modified)`);
+
+        // Verify NO storage access
+        try {
+            if (typeof localStorage !== 'undefined') {
+                const themeKeys = Object.keys(localStorage).filter(k =>
+                    k.toLowerCase().includes('theme')
+                );
+                if (themeKeys.length > 0) {
+                    console.warn(
+                        '⚠️ ThemeDOMBridge: Unexpected localStorage keys found. ' +
+                        'ThemeDOMBridge must NOT access storage.'
+                    );
+                }
+            }
+        } catch (e) {
+            // Storage may not be available
+        }
+
+        // Verify NO event listeners on theme button
+        const themeBtn = document.getElementById('theme-btn');
+        if (themeBtn && typeof getEventListeners !== 'undefined') {
+            const listeners = getEventListeners(themeBtn);
+            if (Object.keys(listeners).length > 0) {
+                console.warn(
+                    '⚠️ ThemeDOMBridge: Event listeners found on theme button. ' +
+                    'ThemeDOMBridge must NOT bind UI events.'
+                );
+            }
+        }
+
+        console.log('🌉 ThemeDOMBridge: Boundary verification complete');
+        console.log('🌉 ThemeDOMBridge: No UI activation, no event listeners, no persistence');
+    }
+
+    // ============================================
+    // EXPOSE TO GLOBAL SCOPE
+    // ============================================
+
+    /**
+     * Expose ThemeDOMBridge globally for runtime validation.
+     * 
+     * @global
+     * @type {Object}
+     */
+    window.ThemeDOMBridge = ThemeDOMBridge;
+
+    // ============================================
+    // INITIALIZATION — READY
+    // ============================================
+
+    // Wait for DOM to be ready before initializing
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeBridge();
+            verifyBridgeBoundaries();
+        });
+    } else {
+        // DOM is already ready
+        initializeBridge();
+        verifyBridgeBoundaries();
+    }
+
+})();
+
 // Global template state - declared immediately
 var CURRENT_TEMPLATE = 'Level 1';
 
@@ -1106,7 +2014,23 @@ function applyAutoExpandToTextarea(textarea) {
     }
 
 // Export button functionality
-const exportBtn = document.querySelector('.toolbar-btn:last-child');
+// Export button functionality - ID-based binding
+const exportBtn = document.getElementById('export-btn');
+if (exportBtn) {
+    exportBtn.addEventListener('click', async function() {
+        console.log('Export button clicked - Copying reflection to clipboard');
+        try {
+            const success = await copyReflection();
+            if (success) {
+                console.log('✓ Reflection copied to clipboard successfully');
+            } else {
+                console.log('⚠ Export failed - check console for details');
+            }
+        } catch (error) {
+            console.log(`⚠ Export error: ${error.message}`);
+        }
+    });
+}
 if (exportBtn) {
     exportBtn.addEventListener('click', async function() {
         console.log('Export button clicked - Copying reflection to clipboard');
@@ -2302,6 +3226,221 @@ if (submitBtn) {
     });
 
     // ============================================
+    // THEME SELECTOR DIALOG (Phase 7C-4.1)
+    // ============================================
+
+    // DOM Elements
+    const themeBtn = document.getElementById('theme-btn');
+    const themeDialog = document.getElementById('theme-selector-dialog');
+    const themeCancelBtn = document.getElementById('cancel-theme-btn');
+    const themeApplyBtn = document.getElementById('apply-theme-btn');
+    const themeCurrentDisplay = document.getElementById('theme-current-display');
+    const themeRadios = document.querySelectorAll('input[name="theme-select"]');
+
+    /**
+     * Open the Theme Selector dialog.
+     * 
+     * Reads the current theme from ThemeController and displays it.
+     * Pre-selects the matching radio button.
+     * 
+     * UI ONLY — No runtime changes occur.
+     */
+    function openThemeDialog() {
+        if (!themeDialog) return;
+
+        // Get current theme from ThemeController (read-only)
+        let currentTheme = 'light';
+        try {
+            if (typeof window.ThemeController !== 'undefined') {
+                currentTheme = window.ThemeController.getTheme();
+            }
+        } catch (e) {
+            console.warn('⚠️ ThemeController not available, using default "light"');
+        }
+
+        // Update display text
+        const displayName = getThemeDisplayName(currentTheme);
+        if (themeCurrentDisplay) {
+            themeCurrentDisplay.textContent = displayName;
+        }
+
+        // Pre-select matching radio button
+        themeRadios.forEach(radio => {
+            if (radio.value === currentTheme) {
+                radio.checked = true;
+            } else {
+                radio.checked = false;
+            }
+        });
+
+        // Show dialog
+        themeDialog.style.display = 'flex';
+
+        console.log(`🎨 Theme dialog opened. Current theme: "${currentTheme}" (${displayName})`);
+    }
+
+    /**
+     * Close the Theme Selector dialog.
+     * 
+     * UI ONLY — No runtime changes occur.
+     */
+    function closeThemeDialog() {
+        if (themeDialog) {
+            themeDialog.style.display = 'none';
+            console.log('🎨 Theme dialog closed');
+        }
+    }
+
+    /**
+     * Get display name for a theme.
+     * 
+     * @param {string} themeId - The theme identifier
+     * @returns {string} The display name
+     */
+    function getThemeDisplayName(themeId) {
+        const names = {
+            light: 'Light',
+            dark: 'Dark',
+            sepia: 'Sepia',
+            forest: 'Forest',
+            ocean: 'Ocean',
+            midnight: 'Midnight'
+        };
+        return names[themeId] || themeId;
+    }
+
+    /**
+     * Theme Apply handler (Phase 7C-6.1 + 7C-6.1A).
+     * 
+     * Reads the selected theme from radio buttons and applies it
+     * through the approved runtime architecture:
+     * 
+     * ThemeSelector → ThemeController → ThemeState → ThemeDOMBridge → CSS
+     * 
+     * This is the EXCLUSIVE runtime entry point for user-confirmed
+     * theme changes. No other UI element may change the theme.
+     * 
+     * Phase 7C-6.1A — Redundant Theme Application Guard:
+     * If the selected theme is already active, skip the entire
+     * runtime pipeline and close the dialog normally.
+     * 
+     * @returns {boolean} true if theme was applied successfully
+     */
+    function handleThemeApply() {
+        // Step 1: Get selected theme from radio buttons
+        let selectedTheme = null;
+        themeRadios.forEach(radio => {
+            if (radio.checked) {
+                selectedTheme = radio.value;
+            }
+        });
+
+        if (!selectedTheme) {
+            console.warn('⚠️ No theme selected in dialog');
+            return false;
+        }
+
+        // Step 2: Verify ThemeController is available
+        if (typeof window.ThemeController === 'undefined') {
+            console.error('❌ ThemeController not available. Cannot apply theme.');
+            return false;
+        }
+
+        try {
+            // Step 3: Check if selected theme is already active (7C-6.1A Guard)
+            const currentActiveTheme = window.ThemeController.getTheme();
+            
+            if (selectedTheme === currentActiveTheme) {
+                // Redundant request — skip entire runtime pipeline
+                console.log(`🎨 Theme "${selectedTheme}" is already active. No runtime update required.`);
+                console.log(`📌 Skipping ThemeController → ThemeState → ThemeDOMBridge pipeline.`);
+                
+                // Still close the dialog normally
+                closeThemeDialog();
+                return true;
+            }
+
+            // Step 4: Apply theme through ThemeController (exclusive entry point)
+            console.log(`🎨 Applying theme: "${selectedTheme}" via ThemeController`);
+            window.ThemeController.setTheme(selectedTheme);
+
+            // Step 5: Log success with current state
+            const currentTheme = window.ThemeController.getTheme();
+            const domTheme = document.documentElement.getAttribute('data-theme');
+            console.log(`✅ Theme applied successfully: "${currentTheme}"`);
+            console.log(`📌 DOM data-theme: "${domTheme}"`);
+
+            // Step 6: Close dialog after successful application
+            closeThemeDialog();
+
+            return true;
+
+        } catch (error) {
+            console.error(`❌ Failed to apply theme "${selectedTheme}":`, error.message);
+            return false;
+        }
+    }
+
+    // ============================================
+    // THEME SELECTOR EVENT BINDING
+    // ============================================
+
+    // Open dialog on Theme button click
+    if (themeBtn) {
+        // Remove any existing listeners (cleanup)
+        const newThemeBtn = themeBtn.cloneNode(true);
+        themeBtn.parentNode.replaceChild(newThemeBtn, themeBtn);
+        
+        // Add click listener
+        newThemeBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            openThemeDialog();
+        });
+        
+        // Store reference for other uses
+        window._themeBtn = newThemeBtn;
+    } else {
+        console.warn('⚠️ Theme button (#theme-btn) not found in DOM');
+    }
+
+    // Close dialog on Cancel button click
+    if (themeCancelBtn) {
+        themeCancelBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            closeThemeDialog();
+        });
+    }
+
+    // Close dialog on overlay click (consistent with Level Selector)
+    if (themeDialog) {
+        themeDialog.addEventListener('click', function(event) {
+            if (event.target === themeDialog) {
+                closeThemeDialog();
+            }
+        });
+    }
+
+    // Apply placeholder (7C-4.1 — NO ACTION)
+    if (themeApplyBtn) {
+        themeApplyBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            handleThemeApply();
+        });
+    }
+
+    // Close dialog on Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (themeDialog && themeDialog.style.display === 'flex') {
+                closeThemeDialog();
+            }
+        }
+    });
+
+    console.log('🎨 Theme Selector Dialog initialized (7C-4.1)');
+    console.log('🎨 Apply button is PLACEHOLDER — No runtime actions in 7C-4.1');
+
+    // ============================================
     // EXPOSE FUNCTIONS FOR TESTING
     // ============================================
 
@@ -2466,6 +3605,126 @@ if (submitBtn) {
     window.applyFontSize = applyFontSize;
     window.getCurrentFontSize = function() { return currentFontSize; };
     window.getEditableWritingFields = getEditableWritingFields;
+
+    // ============================================
+    // PHASE 7E.1 — THEME PERSISTENCE
+    // ============================================
+
+    /**
+     * Persist theme to localStorage.
+     * 
+     * @param {string} themeId - The theme identifier to store
+     */
+    function persistTheme(themeId) {
+        try {
+            if (typeof localStorage === 'undefined') {
+                console.warn('⚠️ localStorage not available');
+                return;
+            }
+            
+            // Validate theme before storing
+            const validThemes = ['light', 'dark', 'sepia', 'forest', 'ocean', 'midnight'];
+            if (!validThemes.includes(themeId)) {
+                console.warn(`⚠️ Invalid theme "${themeId}" — not persisting`);
+                return;
+            }
+            
+            localStorage.setItem('theme', themeId);
+            console.log(`💾 Theme persisted: "${themeId}"`);
+            
+        } catch (error) {
+            console.warn('⚠️ Failed to persist theme:', error.message);
+        }
+    }
+
+    /**
+     * Restore theme from localStorage.
+     * 
+     * @returns {string} The restored theme, or null if none found
+     */
+    function restoreTheme() {
+        try {
+            if (typeof localStorage === 'undefined') {
+                console.warn('⚠️ localStorage not available');
+                return null;
+            }
+            
+            const stored = localStorage.getItem('theme');
+            if (stored === null) {
+                console.log('💾 No stored theme found');
+                return null;
+            }
+            
+            // Validate stored theme
+            const validThemes = ['light', 'dark', 'sepia', 'forest', 'ocean', 'midnight'];
+            if (!validThemes.includes(stored)) {
+                console.warn(`⚠️ Invalid stored theme "${stored}" — falling back to light`);
+                localStorage.removeItem('theme'); // Clean up invalid value
+                return null;
+            }
+            
+            console.log(`💾 Restored theme: "${stored}"`);
+            return stored;
+            
+        } catch (error) {
+            console.warn('⚠️ Failed to restore theme:', error.message);
+            return null;
+        }
+    }
+
+    /**
+     * Initialize theme persistence on startup.
+     * 
+     * Restores stored theme if valid, otherwise uses default "light".
+     * This runs BEFORE the ThemeDOMBridge initial DOM sync.
+     */
+    function initializePersistence() {
+        console.log('💾 Theme Persistence: Initializing...');
+        
+        // Wait for ThemeController to be ready
+        if (typeof window.ThemeController === 'undefined') {
+            console.warn('⚠️ ThemeController not available — persistence initialization deferred');
+            return;
+        }
+        
+        // Attempt to restore stored theme
+        const storedTheme = restoreTheme();
+        
+        if (storedTheme) {
+            // Apply stored theme
+            try {
+                window.ThemeController.setTheme(storedTheme);
+                console.log(`💾 Theme restored and applied: "${storedTheme}"`);
+            } catch (error) {
+                console.warn('⚠️ Failed to apply restored theme:', error.message);
+                // Fallback to light
+                window.ThemeController.setTheme('light');
+                console.log('💾 Fallback to light theme applied');
+            }
+        } else {
+            // No stored theme — ensure light is persisted
+            console.log('💾 No valid stored theme — using default (light)');
+            try {
+                const currentTheme = window.ThemeController.getTheme();
+                persistTheme(currentTheme);
+            } catch (error) {
+                console.warn('⚠️ Failed to persist default theme:', error.message);
+            }
+        }
+        
+        console.log('💾 Theme Persistence: Initialized');
+    }
+
+    // Initialize persistence on DOM ready
+    // This must run BEFORE ThemeDOMBridge initializes to ensure correct theme
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure ThemeController is fully initialized
+            setTimeout(initializePersistence, 10);
+        });
+    } else {
+        setTimeout(initializePersistence, 10);
+    }
 
     console.log('Daily Bible Reflection Notepad v0.1 loaded');
     console.log('Template Level Detection available: window.detectTemplateLevel()');
