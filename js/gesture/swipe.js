@@ -87,7 +87,6 @@
     function getNextTheme(currentTheme) {
         const index = THEME_SEQUENCE.indexOf(currentTheme);
         if (index === -1) {
-            // Fallback: return first theme
             return THEME_SEQUENCE[0];
         }
         const nextIndex = (index + 1) % THEME_SEQUENCE.length;
@@ -103,7 +102,6 @@
     function getPreviousTheme(currentTheme) {
         const index = THEME_SEQUENCE.indexOf(currentTheme);
         if (index === -1) {
-            // Fallback: return last theme
             return THEME_SEQUENCE[THEME_SEQUENCE.length - 1];
         }
         const prevIndex = (index - 1 + THEME_SEQUENCE.length) % THEME_SEQUENCE.length;
@@ -123,17 +121,14 @@
      * @returns {boolean} true if valid
      */
     function isValidSwipe(deltaX, deltaY, duration) {
-        // Must be horizontal enough
         if (Math.abs(deltaX) < CONFIG.MIN_SWIPE_DISTANCE) {
             return false;
         }
         
-        // Must be more horizontal than vertical
         if (Math.abs(deltaX) <= Math.abs(deltaY)) {
             return false;
         }
         
-        // Must be quick enough
         if (duration > CONFIG.MAX_SWIPE_DURATION) {
             return false;
         }
@@ -160,7 +155,6 @@
     function isExcludedTarget(target) {
         if (!target) return false;
         
-        // Check against excluded selectors
         for (const selector of CONFIG.EXCLUDED_SELECTORS) {
             if (target.closest(selector)) {
                 return true;
@@ -196,21 +190,18 @@
     function applyNextTheme() {
         try {
             if (typeof window.ThemeController === 'undefined') {
-                console.warn('⚠️ Swipe: ThemeController not available');
                 return false;
             }
             
             const currentTheme = window.ThemeController.getTheme();
             const nextTheme = getNextTheme(currentTheme);
             
-            // Apply through ThemeController (7C contract)
             window.ThemeController.setTheme(nextTheme);
             
-            console.log(`👆 Swipe: Next theme → "${nextTheme}"`);
             return true;
             
         } catch (error) {
-            console.error('❌ Swipe: Failed to apply next theme:', error.message);
+            console.warn('⚠️ Swipe: Failed to apply next theme:', error.message);
             return false;
         }
     }
@@ -226,21 +217,18 @@
     function applyPreviousTheme() {
         try {
             if (typeof window.ThemeController === 'undefined') {
-                console.warn('⚠️ Swipe: ThemeController not available');
                 return false;
             }
             
             const currentTheme = window.ThemeController.getTheme();
             const previousTheme = getPreviousTheme(currentTheme);
             
-            // Apply through ThemeController (7C contract)
             window.ThemeController.setTheme(previousTheme);
             
-            console.log(`👆 Swipe: Previous theme → "${previousTheme}"`);
             return true;
             
         } catch (error) {
-            console.error('❌ Swipe: Failed to apply previous theme:', error.message);
+            console.warn('⚠️ Swipe: Failed to apply previous theme:', error.message);
             return false;
         }
     }
@@ -255,7 +243,6 @@
      * Records the starting position and time of the touch.
      */
     function handleTouchStart(event) {
-        // Skip if multiple touches
         if (event.touches.length !== 1) {
             _isTouching = false;
             return;
@@ -264,13 +251,11 @@
         const touch = event.touches[0];
         const target = event.target;
         
-        // Skip excluded targets
         if (isExcludedTarget(target)) {
             _isTouching = false;
             return;
         }
         
-        // Record touch start
         _touchStartX = touch.clientX;
         _touchStartY = touch.clientY;
         _touchStartTime = Date.now();
@@ -289,13 +274,10 @@
         const deltaX = touch.clientX - _touchStartX;
         const deltaY = touch.clientY - _touchStartY;
         
-        // If vertical movement dominates, treat as scroll
         if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > 20) {
-            // Allow vertical scroll — don't prevent default
             return;
         }
         
-        // For horizontal swipes, prevent default to avoid page scroll
         if (Math.abs(deltaX) > 20) {
             event.preventDefault();
         }
@@ -311,37 +293,29 @@
             return;
         }
         
-        // Reset touching state
         _isTouching = false;
         
-        // Calculate gesture metrics
         const endX = event.changedTouches[0].clientX;
         const endY = event.changedTouches[0].clientY;
         const deltaX = endX - _touchStartX;
         const deltaY = endY - _touchStartY;
         const duration = Date.now() - _touchStartTime;
         
-        // Validate gesture
         if (!isValidSwipe(deltaX, deltaY, duration)) {
             return;
         }
         
-        // Check debounce
         if (!isCooldownPassed()) {
-            console.log('👆 Swipe: Debounced (cooldown active)');
             return;
         }
         
-        // Resolve direction and apply theme
         const direction = resolveDirection(deltaX);
         
         if (direction === 'left') {
-            // Swipe Left → Next Theme
             if (applyNextTheme()) {
                 _lastGestureTime = Date.now();
             }
         } else if (direction === 'right') {
-            // Swipe Right → Previous Theme
             if (applyPreviousTheme()) {
                 _lastGestureTime = Date.now();
             }
@@ -358,34 +332,20 @@
      * Attaches touch event listeners to the app container.
      */
     function initializeSwipeEngine() {
-        // Prevent double initialization
         if (_isInitialized) {
-            console.warn('⚠️ Swipe: Already initialized');
             return;
         }
         
-        // Get container
         const container = document.querySelector(CONFIG.CONTAINER_SELECTOR);
         if (!container) {
-            console.warn('⚠️ Swipe: Container not found');
             return;
         }
         
-        // Attach touch events
         container.addEventListener('touchstart', handleTouchStart, { passive: true });
         container.addEventListener('touchmove', handleTouchMove, { passive: false });
         container.addEventListener('touchend', handleTouchEnd, { passive: true });
         
         _isInitialized = true;
-        
-        console.log('👆 Swipe Gesture Engine initialized');
-        console.log(`👆 Active zone: ${CONFIG.CONTAINER_SELECTOR}`);
-        console.log('👆 Swipe Left → Next Theme');
-        console.log('👆 Swipe Right → Previous Theme');
-        console.log(`👆 Min distance: ${CONFIG.MIN_SWIPE_DISTANCE}px`);
-        console.log(`👆 Max duration: ${CONFIG.MAX_SWIPE_DURATION}ms`);
-        console.log(`👆 Debounce: ${CONFIG.DEBOUNCE_COOLDOWN}ms`);
-        console.log(`👆 Theme sequence: ${THEME_SEQUENCE.join(' → ')}`);
     }
 
     // ============================================================
@@ -415,12 +375,7 @@
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeSwipeEngine);
     } else {
-        // DOM already ready
         initializeSwipeEngine();
     }
-
-    console.log('👆 Swipe Gesture Engine module loaded');
-    console.log('👆 Phase 7D — Pure Input Translation Layer');
-    console.log('👆 Integration: Gesture → ThemeController → ThemeState → ThemeDOMBridge → CSS');
 
 })();
