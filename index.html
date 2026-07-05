@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Bible Reflection Notepad</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
     <!-- ===== SKIP LINK ===== -->
@@ -88,7 +88,7 @@
                     </div>
                     <div class="template-field">
                         <label for="field-reflection">Reflection: <span class="required-indicator" aria-hidden="true">*</span></label>
-                        <textarea class="template-textarea" id="field-reflection" data-field="reflection" required aria-required="true" aria-label="Reflection content" aria-describedby="reflection-helper" placeholder="Write your reflection here..."></textarea>
+                        <textarea class="template-textarea" id="field-reflection" data-field="reflection" required aria-required="true" aria-label="Reflection content" aria-describedby="reflection-helper" placeholder="Write your reflection here..." style="min-height: 120px; max-height: 220px; overflow-y: auto; resize: vertical;"></textarea>
                         <div id="reflection-helper" class="helper-text">Write your daily Bible reflection here. Reflect honestly and write what is on your heart.</div>
                         <div class="field-error" id="error-reflection" role="alert"></div>
                     </div>
