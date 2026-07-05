@@ -809,9 +809,10 @@ body {
     font-family: inherit;
     background-color: var(--color-bg-input);
     color: var(--color-text-primary);
-    min-height: 160px;
-    overflow: hidden;
-    resize: none;
+    min-height: 120px;
+    max-height: 220px;
+    overflow-y: auto;
+    resize: vertical;
     min-width: 0;
     width: 100%;
     transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease, color 0.3s ease;
@@ -2584,8 +2585,12 @@ textarea,
 
 /* Prevent horizontal overflow on mobile */
 @media (max-width: 768px) {
-    #app {
-        overflow-x: hidden;
+    /* #app overflow-x: hidden removed - sticky context restored */
+    /* Horizontal overflow prevention preserved via body and container rules */
+
+    /* Theme button hidden on mobile/tablet (≤768px) */
+    .theme-placeholder {
+        display: none !important;
     }
 }
 
